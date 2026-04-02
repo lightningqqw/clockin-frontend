@@ -1,0 +1,59 @@
+<!-- 打卡卡片组件 -->
+<view class="checkin-card">
+  <view class="checkin-header">
+    <view class="user-info" bind:tap="onUserTap">
+      <image class="user-avatar" src="{{userAvatar}}" mode="aspectFill" />
+      <view class="user-meta">
+        <view class="user-name">{{userNickname}}</view>
+        <view class="checkin-time">{{formatTime}}</view>
+      </view>
+    </view>
+    <view wx:if="{{checkin.mood}}" class="mood-tag">{{moodEmoji}}</view>
+  </view>
+
+  <view class="checkin-content" bind:tap="onContentTap">
+    <view wx:if="{{checkin.checkinDate}}" class="checkin-date">
+      <text class="date-icon">📅</text>
+      <text>{{checkin.checkinDate}}</text>
+    </view>
+    <view class="content-text">{{checkin.content}}</view>
+    <view wx:if="{{checkin.images && checkin.images.length > 0}}" class="image-grid">
+      <image
+        wx:for="{{checkin.images}}"
+        wx:key="index"
+        class="grid-image"
+        src="{{item}}"
+        mode="aspectFill"
+        bind:tap="onImageTap"
+        data-url="{{item}}"
+      />
+    </view>
+    <view wx:if="{{checkin.location}}" class="checkin-location">
+      <text class="location-icon">📍</text>
+      <text>{{checkin.location}}</text>
+    </view>
+  </view>
+
+  <view class="checkin-footer">
+    <view class="footer-left">
+      <view class="action-btn {{checkin.hasLiked ? 'active' : ''}}" bind:tap="onLikeTap">
+        <text class="btn-icon">{{checkin.hasLiked ? '❤️' : '🤍'}}</text>
+        <text class="btn-text">{{checkin.likeCount || 0}}</text>
+      </view>
+      <view class="action-btn" bind:tap="onShareTap">
+        <text class="btn-icon">💬</text>
+        <text class="btn-text">评论</text>
+      </view>
+    </view>
+    <view class="footer-right">
+      <view wx:if="{{isOwner}}" class="action-btn" bind:tap="onEditTap">
+        <text class="btn-icon">✏️</text>
+        <text class="btn-text">编辑</text>
+      </view>
+      <view wx:if="{{isOwner}}" class="action-btn" bind:tap="onDeleteTap">
+        <text class="btn-icon">🗑️</text>
+        <text class="btn-text">删除</text>
+      </view>
+    </view>
+  </view>
+</view>

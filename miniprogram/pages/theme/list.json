@@ -1,0 +1,9 @@
+{
+  "usingComponents": {
+    "navbar": "/components/common/navbar/index",
+    "theme-card": "/components/business/theme-card/index",
+    "empty": "/components/common/empty/index",
+    "loading": "/components/common/loading/index",
+    "custom-button": "/components/common/button/index"
+  }
+}

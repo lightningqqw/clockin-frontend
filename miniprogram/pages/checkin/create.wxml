@@ -1,0 +1,97 @@
+<!-- 创建打卡页 -->
+<view class="create-checkin-page">
+  <navbar title="打卡"></navbar>
+
+  <view class="page-content">
+    <!-- 主题信息 -->
+    <view class="theme-info-bar">
+      <text class="label">打卡主题：</text>
+      <text class="value">{{themeTitle}}</text>
+    </view>
+
+    <!-- 打卡内容 -->
+    <card title="打卡内容">
+      <textarea
+        class="content-input"
+        placeholder="记录今天的打卡内容..."
+        value="{{content}}"
+        bind:input="onContentChange"
+        maxlength="1000"
+        auto-height
+      />
+      <view class="word-count">{{content.length}}/1000</view>
+    </card>
+
+    <!-- 图片上传 -->
+    <card title="图片（最多9张）">
+      <view class="image-uploader">
+        <view
+          wx:for="{{images}}"
+          wx:key="index"
+          class="image-item"
+        >
+          <image class="uploaded-image" src="{{item}}" mode="aspectFill" bind:tap="previewImage" data-url="{{item}}" />
+          <view class="delete-btn" bind:tap="removeImage" data-index="{{index}}">×</view>
+        </view>
+        <view wx:if="{{images.length < 9}}" class="upload-btn" bind:tap="chooseImage">
+          <text class="upload-icon">+</text>
+          <text class="upload-text">添加图片</text>
+        </view>
+      </view>
+    </card>
+
+    <!-- 心情选择 -->
+    <card title="今天的心情">
+      <view class="mood-selector">
+        <view
+          wx:for="{{moodOptions}}"
+          wx:key="value"
+          class="mood-item {{mood === item.value ? 'active' : ''}}"
+          bind:tap="selectMood"
+          data-mood="{{item.value}}"
+        >
+          <text class="mood-emoji">{{item.emoji}}</text>
+          <text class="mood-label">{{item.label}}</text>
+        </view>
+      </view>
+    </card>
+
+    <!-- 位置 -->
+    <card title="位置信息" extra="{{location ? '已选择' : '未选择'}}">
+      <view class="location-row">
+        <view wx:if="{{location}}" class="location-info">
+          <text class="location-icon">📍</text>
+          <text class="location-text">{{location}}</text>
+        </view>
+        <view wx:else class="location-hint">添加位置信息</view>
+        <custom-button
+          type="default"
+          size="small"
+          plain
+          bind:tap="getLocation"
+        >{{location ? '重新选择' : '选择位置'}}</custom-button>
+      </view>
+    </card>
+
+    <!-- 打卡日期 -->
+    <card title="打卡日期" wx:if="{{theme.allowSupplement}}">
+      <picker mode="date" value="{{checkinDate}}" bind:change="onDateChange">
+        <view class="date-picker">
+          <text class="date-value">{{checkinDate}}</text>
+          <text class="picker-arrow">›</text>
+        </view>
+      </picker>
+    </card>
+
+    <!-- 提交按钮 -->
+    <view class="submit-area">
+      <custom-button
+        type="primary"
+        size="large"
+        round
+        loading="{{submitting}}"
+        bind:tap="submit"
+      >提交打卡</custom-button>
+    </view>
+  </view>
+</view>

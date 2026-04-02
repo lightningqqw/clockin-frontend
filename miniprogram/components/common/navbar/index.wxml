@@ -1,0 +1,16 @@
+<!-- 自定义导航栏 -->
+<view class="custom-navbar" style="{{navbarStyle}}">
+  <view class="navbar-content">
+    <view wx:if="{{showBack}}" class="back-btn" bind:tap="onBack">
+      <text class="back-icon">‹</text>
+    </view>
+    <view wx:if="{{showHome}}" class="home-btn" bind:tap="onHome">
+      <text class="home-icon">⌂</text>
+    </view>
+    <view class="navbar-title">{{title}}</view>
+    <view class="navbar-right">
+      <slot name="right"></slot>
+    </view>
+  </view>
+</view>
+<view wx:if="{{fixed}}" class="navbar-placeholder" style="height: {{height}}px"></view>

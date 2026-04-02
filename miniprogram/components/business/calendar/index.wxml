@@ -1,0 +1,48 @@
+<!-- 日历组件 -->
+<view class="calendar">
+  <!-- 日历头部 -->
+  <view class="calendar-header">
+    <view class="header-left">
+      <text class="current-month">{{currentYear}}年{{currentMonth}}月</text>
+    </view>
+    <view class="header-right">
+      <view class="nav-btn" bind:tap="prevMonth">‹</view>
+      <view class="nav-btn" bind:tap="nextMonth">›</view>
+    </view>
+  </view>
+
+  <!-- 星期标题 -->
+  <view class="week-header">
+    <view wx:for="{{weekDays}}" wx:key="index" class="week-day">{{item}}</view>
+  </view>
+
+  <!-- 日期网格 -->
+  <view class="days-grid">
+    <view
+      wx:for="{{days}}"
+      wx:key="date"
+      class="day-cell {{item.isCurrentMonth ? 'current-month' : 'other-month'}} {{item.isToday ? 'today' : ''}} {{item.hasCheckin ? 'has-checkin' : ''}} {{item.isFuture ? 'future' : ''}}"
+      bind:tap="onDayTap"
+      data-day="{{item}}"
+    >
+      <view class="day-number">{{item.day}}</view>
+      <view wx:if="{{item.hasCheckin}}" class="checkin-indicator"></view>
+    </view>
+  </view>
+
+  <!-- 统计信息 -->
+  <view wx:if="{{showStats}}" class="calendar-stats">
+    <view class="stat-item">
+      <text class="stat-value">{{checkinCount}}</text>
+      <text class="stat-label">本月打卡</text>
+    </view>
+    <view class="stat-item">
+      <text class="stat-value">{{streakDays}}</text>
+      <text class="stat-label">连续打卡</text>
+    </view>
+    <view class="stat-item">
+      <text class="stat-value">{{completionRate}}%</text>
+      <text class="stat-label">完成率</text>
+    </view>
+  </view>
+</view>

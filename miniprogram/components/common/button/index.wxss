@@ -1,0 +1,134 @@
+/* 按钮组件样式 */
+.custom-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  outline: none;
+  background: none;
+  padding: 0;
+  margin: 0;
+  font-size: 28rpx;
+  font-weight: 500;
+  transition: all 0.3s ease;
+}
+
+.custom-button::after {
+  border: none;
+}
+
+/* 类型样式 */
+.custom-button.primary {
+  background: #07c160;
+  color: #fff;
+}
+
+.custom-button.secondary {
+  background: #576b95;
+  color: #fff;
+}
+
+.custom-button.danger {
+  background: #fa5151;
+  color: #fff;
+}
+
+.custom-button.default {
+  background: #f2f2f2;
+  color: #333;
+}
+
+/* 尺寸样式 */
+.custom-button.large {
+  height: 96rpx;
+  padding: 0 48rpx;
+  border-radius: 48rpx;
+  font-size: 32rpx;
+}
+
+.custom-button.medium {
+  height: 72rpx;
+  padding: 0 32rpx;
+  border-radius: 36rpx;
+  font-size: 28rpx;
+}
+
+.custom-button.small {
+  height: 56rpx;
+  padding: 0 24rpx;
+  border-radius: 28rpx;
+  font-size: 24rpx;
+}
+
+.custom-button.mini {
+  height: 44rpx;
+  padding: 0 16rpx;
+  border-radius: 22rpx;
+  font-size: 22rpx;
+}
+
+/* 镂空样式 */
+.custom-button.plain.primary {
+  background: transparent;
+  border: 2rpx solid #07c160;
+  color: #07c160;
+}
+
+.custom-button.plain.secondary {
+  background: transparent;
+  border: 2rpx solid #576b95;
+  color: #576b95;
+}
+
+.custom-button.plain.danger {
+  background: transparent;
+  border: 2rpx solid #fa5151;
+  color: #fa5151;
+}
+
+.custom-button.plain.default {
+  background: transparent;
+  border: 2rpx solid #ccc;
+  color: #666;
+}
+
+/* 圆角样式 */
+.custom-button.round {
+  border-radius: 9999rpx;
+}
+
+/* 禁用样式 */
+.custom-button.disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* 加载状态 */
+.custom-button.loading {
+  opacity: 0.8;
+}
+
+.button-content {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.loading-icon {
+  width: 28rpx;
+  height: 28rpx;
+  margin-right: 12rpx;
+  border: 3rpx solid currentColor;
+  border-top-color: transparent;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}

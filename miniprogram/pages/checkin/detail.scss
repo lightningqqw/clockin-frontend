@@ -1,0 +1,52 @@
+/* 打卡详情页样式 */
+.page-content {
+  padding: 24rpx;
+}
+
+.loading-full,
+.empty-full {
+  padding: 200rpx 0;
+}
+
+/* 点赞区域 */
+.like-section {
+  background: #fff;
+  border-radius: 16rpx;
+  padding: 24rpx;
+  margin-top: 24rpx;
+}
+
+.section-title {
+  font-size: 28rpx;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 20rpx;
+}
+
+.like-users {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16rpx;
+}
+
+.like-avatar {
+  width: 64rpx;
+  height: 64rpx;
+  border-radius: 32rpx;
+  background: #f0f0f0;
+}
+
+/* 评论区域 */
+.comment-section {
+  background: #fff;
+  border-radius: 16rpx;
+  padding: 24rpx;
+  margin-top: 24rpx;
+}
+
+.no-comments {
+  text-align: center;
+  padding: 60rpx 0;
+  font-size: 28rpx;
+  color: #999;
+}

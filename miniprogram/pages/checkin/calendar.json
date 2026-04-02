@@ -1,0 +1,8 @@
+{
+  "usingComponents": {
+    "navbar": "/components/common/navbar/index",
+    "calendar": "/components/business/calendar/index",
+    "card": "/components/common/card/index",
+    "loading": "/components/common/loading/index"
+  }
+}

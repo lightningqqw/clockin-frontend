@@ -1,0 +1,14 @@
+<!-- 自定义 TabBar -->
+<view class="custom-tab-bar {{isIpx ? 'ipx' : ''}}">
+  <view
+    wx:for="{{list}}"
+    wx:key="index"
+    class="tab-item {{selected === index ? 'active' : ''}}"
+    bind:tap="switchTab"
+    data-index="{{index}}"
+    data-url="{{item.pagePath}}"
+  >
+    <view class="tab-icon">{{selected === index ? item.selectedIconPath : item.iconPath}}</view>
+    <view class="tab-text">{{item.text}}</view>
+  </view>
+</view>

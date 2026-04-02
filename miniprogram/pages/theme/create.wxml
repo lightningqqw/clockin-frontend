@@ -1,0 +1,118 @@
+<!-- 创建主题页 -->
+<view class="create-theme-page">
+  <navbar title="创建主题"></navbar>
+
+  <view class="page-content">
+    <!-- 基本信息 -->
+    <card title="基本信息">
+      <view class="form-item">
+        <view class="form-label required">主题名称</view>
+        <input
+          class="form-input"
+          placeholder="请输入主题名称"
+          value="{{form.title}}"
+          bind:input="onInputChange"
+          data-field="title"
+          maxlength="50"
+        />
+      </view>
+
+      <view class="form-item">
+        <view class="form-label">主题描述</view>
+        <textarea
+          class="form-textarea"
+          placeholder="请输入主题描述（选填）"
+          value="{{form.description}}"
+          bind:input="onTextareaChange"
+          data-field="description"
+          maxlength="500"
+        />
+      </view>
+
+      <view class="form-item">
+        <view class="form-label required">主题类型</view>
+        <view class="type-selector">
+          <view
+            class="type-option {{form.type === 'simple' ? 'active' : ''}}"
+            bind:tap="selectType"
+            data-type="simple"
+          >
+            <text class="type-icon">✓</text>
+            <text class="type-name">简单打卡</text>
+            <text class="type-desc">快速打卡，适合简单习惯养成</text>
+          </view>
+          <view
+            class="type-option {{form.type === 'rich' ? 'active' : ''}}"
+            bind:tap="selectType"
+            data-type="rich"
+          >
+            <text class="type-icon">📝</text>
+            <text class="type-name">富文本打卡</text>
+            <text class="type-desc">图文记录，适合详细记录</text>
+          </view>
+        </view>
+      </view>
+    </card>
+
+    <!-- 时间设置 -->
+    <card title="时间设置">
+      <view class="form-item">
+        <view class="form-label required">开始日期</view>
+        <picker mode="date" value="{{form.startDate}}" bind:change="onDateChange" data-field="startDate">
+          <view class="picker-value">{{form.startDate || '请选择开始日期'}}</view>
+        </picker>
+      </view>
+
+      <view class="form-item">
+        <view class="form-label required">结束日期</view>
+        <picker mode="date" value="{{form.endDate}}" bind:change="onDateChange" data-field="endDate">
+          <view class="picker-value">{{form.endDate || '请选择结束日期'}}</view>
+        </picker>
+      </view>
+
+      <view class="form-item">
+        <view class="form-label">打卡提醒</view>
+        <picker mode="time" value="{{form.reminderTime}}" bind:change="onTimeChange">
+          <view class="picker-value">{{form.reminderTime || '不提醒'}}</view>
+        </picker>
+      </view>
+
+      <view class="form-item">
+        <view class="form-label">重复周期</view>
+        <view class="repeat-days">
+          <view
+            wx:for="{{repeatDays}}"
+            wx:key="value"
+            class="day-tag {{form.repeatDays.includes(item.value) ? 'active' : ''}}"
+            bind:tap="toggleRepeatDay"
+            data-day="{{item.value}}"
+          >{{item.label}}</view>
+        </view>
+      </view>
+    </card>
+
+    <!-- 高级设置 -->
+    <card title="高级设置">
+      <view class="form-item switch-item">
+        <view class="form-label">允许补打卡</view>
+        <switch checked="{{form.allowSupplement}}" bind:change="onSwitchChange" data-field="allowSupplement" />
+      </view>
+
+      <view class="form-item switch-item">
+        <view class="form-label">公开主题</view>
+        <switch checked="{{form.isPublic}}" bind:change="onSwitchChange" data-field="isPublic" />
+      </view>
+    </card>
+
+    <!-- 提交按钮 -->
+    <view class="submit-area">
+      <custom-button
+        type="primary"
+        size="large"
+        round
+        loading="{{submitting}}"
+        bind:tap="submit"
+      >创建主题</custom-button>
+    </view>
+  </view>
+</view>

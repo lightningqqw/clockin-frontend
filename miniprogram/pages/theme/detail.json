@@ -1,0 +1,11 @@
+{
+  "usingComponents": {
+    "navbar": "/components/common/navbar/index",
+    "calendar": "/components/business/calendar/index",
+    "checkin-card": "/components/business/checkin-card/index",
+    "card": "/components/common/card/index",
+    "empty": "/components/common/empty/index",
+    "loading": "/components/common/loading/index",
+    "custom-button": "/components/common/button/index"
+  }
+}

@@ -1,0 +1,8 @@
+{
+  "usingComponents": {
+    "navbar": "/components/common/navbar/index",
+    "custom-button": "/components/common/button/index",
+    "loading": "/components/common/loading/index",
+    "card": "/components/common/card/index"
+  }
+}

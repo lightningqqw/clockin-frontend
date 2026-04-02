@@ -1,0 +1,90 @@
+/* 加入主题页样式 */
+.page-content {
+  padding: 48rpx 32rpx;
+}
+
+/* 头部 */
+.join-header {
+  text-align: center;
+  padding: 48rpx 0;
+}
+
+.join-icon {
+  font-size: 80rpx;
+  margin-bottom: 24rpx;
+}
+
+.join-title {
+  font-size: 36rpx;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 16rpx;
+}
+
+.join-desc {
+  font-size: 28rpx;
+  color: #999;
+}
+
+/* 表单 */
+.form-group {
+  margin-bottom: 48rpx;
+}
+
+.form-label {
+  font-size: 28rpx;
+  color: #333;
+  margin-bottom: 16rpx;
+  font-weight: 500;
+}
+
+.code-input {
+  width: 100%;
+  height: 96rpx;
+  padding: 0 32rpx;
+  background: #f7f7f7;
+  border-radius: 16rpx;
+  font-size: 32rpx;
+  text-align: center;
+  letter-spacing: 8rpx;
+  box-sizing: border-box;
+}
+
+.input-tips {
+  margin-top: 16rpx;
+  font-size: 24rpx;
+  color: #999;
+  text-align: center;
+}
+
+/* 提交按钮 */
+.submit-area {
+  margin-bottom: 24rpx;
+}
+
+/* 提示区域 */
+.tips-section {
+  margin-top: 48rpx;
+  padding: 32rpx;
+  background: #f0f9ff;
+  border-radius: 16rpx;
+}
+
+.tips-title {
+  font-size: 30rpx;
+  font-weight: 600;
+  color: #576b95;
+  margin-bottom: 24rpx;
+}
+
+.tips-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16rpx;
+}
+
+.tip-item {
+  font-size: 26rpx;
+  color: #666;
+  line-height: 1.6;
+}

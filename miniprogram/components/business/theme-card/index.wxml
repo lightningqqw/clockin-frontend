@@ -1,0 +1,31 @@
+<!-- 主题卡片组件 -->
+<view class="theme-card" bind:tap="onTap">
+  <image wx:if="{{theme.coverImage}}" class="theme-cover" src="{{theme.coverImage}}" mode="aspectFill" />
+  <view wx:else class="theme-cover placeholder">
+    <text class="cover-icon">🎯</text>
+  </view>
+  <view class="theme-content">
+    <view class="theme-header">
+      <view class="theme-title">{{theme.title}}</view>
+      <view class="theme-type {{theme.type}}">{{theme.type === 'simple' ? '简单' : '富文本'}}</view>
+    </view>
+    <view wx:if="{{theme.description}}" class="theme-description">{{theme.description}}</view>
+    <view class="theme-meta">
+      <view class="meta-item">
+        <text class="meta-icon">👥</text>
+        <text class="meta-text">{{theme.memberCount || 0}}人参与</text>
+      </view>
+      <view class="meta-item">
+        <text class="meta-icon">📅</text>
+        <text class="meta-text">{{theme.startDate}} 开始</text>
+      </view>
+    </view>
+    <view wx:if="{{showProgress}}" class="theme-progress">
+      <view class="progress-bar">
+        <view class="progress-fill" style="width: {{progress}}%"></view>
+      </view>
+      <text class="progress-text">{{progress}}%</text>
+    </view>
+  </view>
+  <view wx:if="{{theme.role === 'creator'}}" class="theme-badge creator">创建者</view>
+</view>

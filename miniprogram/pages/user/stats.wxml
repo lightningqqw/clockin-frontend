@@ -1,0 +1,73 @@
+<!-- 统计页面 -->
+<view class="stats-page">
+  <navbar title="数据统计"></navbar>
+
+  <view class="page-content">
+    <!-- 总体统计 -->
+    <card title="总体统计">
+      <view class="stats-overview">
+        <view class="overview-item">
+          <view class="overview-value">{{stats.totalCheckins}}</view>
+          <view class="overview-label">总打卡次数</view>
+        </view>
+        <view class="overview-divider"></view>
+        <view class="overview-item">
+          <view class="overview-value">{{stats.streakDays}}</view>
+          <view class="overview-label">连续打卡(天)</view>
+        </view>
+        <view class="overview-divider"></view>
+        <view class="overview-item">
+          <view class="overview-value">{{stats.totalThemes}}</view>
+          <view class="overview-label">参与主题</view>
+        </view>
+      </view>
+    </card>
+
+    <!-- 本周打卡 -->
+    <card title="本周打卡">
+      <view wx:if="{{loading}}" class="loading-area">
+        <loading></loading>
+      </view>
+
+      <view wx:elif="{{weeklyStats.length === 0}}" class="empty-area">
+        <empty title="暂无数据" description="本周还没有打卡记录"></empty>
+      </view>
+
+      <view wx:else class="weekly-chart">
+        <view
+          wx:for="{{weeklyStats}}"
+          wx:key="day"
+          class="chart-bar-item"
+        >
+          <view class="bar-wrapper">
+            <view
+              class="bar-fill {{item.count > 0 ? 'active' : ''}}"
+              style="height: {{item.percentage}}%"
+            ></view>
+          </view>
+          <view class="bar-label">{{item.label}}</view>
+          <view class="bar-value">{{item.count}}</view>
+        </view>
+      </view>
+    </card>
+
+    <!-- 最近打卡 -->
+    <card title="最近打卡记录">
+      <view wx:if="{{recentCheckins.length === 0}}" class="empty-area">
+        <empty title="暂无记录"></empty>
+      </view>
+
+      <view wx:else class="recent-list">
+        <view
+          wx:for="{{recentCheckins}}"
+          wx:key="id"
+          class="recent-item"
+        >
+          <view class="recent-date">{{item.date}}</view>
+          <view class="recent-content">{{item.themeTitle}}</view>
+          <view class="recent-count">+{{item.count}}</view>
+        </view>
+      </view>
+    </card>
+  </view>
+</view>

@@ -1,0 +1,45 @@
+<!-- 打卡详情页 -->
+<view class="checkin-detail-page">
+  <navbar title="打卡详情"></navbar>
+
+  <view wx:if="{{loading}}" class="loading-full">
+    <loading></loading>
+  </view>
+
+  <view wx:elif="{{!checkin.id}}" class="empty-full">
+    <empty title="打卡记录不存在" description="该记录可能已被删除"></empty>
+  </view>
+
+  <view wx:else class="page-content">
+    <checkin-card
+      checkin="{{checkin}}"
+      isOwner="{{isOwner}}"
+      bind:like="onLike"
+      bind:delete="onDelete"
+    ></checkin-card>
+
+    <!-- 点赞用户 -->
+    <view wx:if="{{likeUsers.length > 0}}" class="like-section">
+      <view class="section-title">
+        <text>❤️ {{checkin.likeCount || 0}} 人点赞</text>
+      </view>
+      <view class="like-users">
+        <image
+          wx:for="{{likeUsers}}"
+          wx:key="id"
+          class="like-avatar"
+          src="{{item.avatarUrl}}"
+          mode="aspectFill"
+        />
+      </view>
+    </view>
+
+    <!-- 评论区域（预留） -->
+    <view class="comment-section">
+      <view class="section-title">评论 ({{comments.length}})</view>
+      <view wx:if="{{comments.length === 0}}" class="no-comments">
+        暂无评论，来说两句吧
+      </view>
+    </view>
+  </view>
+</view>

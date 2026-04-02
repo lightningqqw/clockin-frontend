@@ -1,0 +1,42 @@
+<!-- 通知列表页 -->
+<view class="notifications-page">
+  <navbar title="我的通知">
+    <view wx:if="{{notifications.length > 0}}" slot="right" class="header-action" bind:tap="markAllRead">全部已读</view>
+  </navbar>
+
+  <view class="page-content">
+    <view wx:if="{{loading && !notifications.length}}" class="loading-area">
+      <loading></loading>
+    </view>
+
+    <view wx:elif="{{!notifications.length}}" class="empty-area">
+      <empty title="暂无通知" description="有新的消息会第一时间通知您"></empty>
+    </view>
+
+    <view wx:else class="notification-list">
+      <view
+        wx:for="{{notifications}}"
+        wx:key="id"
+        class="notification-item {{!item.isRead ? 'unread' : ''}}"
+        bind:tap="onNotificationTap"
+        data-item="{{item}}"
+      >
+        <view class="notification-icon">{{getIcon(item.type)}}</view>
+        <view class="notification-content">
+          <view class="notification-header">
+            <text class="notification-title">{{item.title}}</text>
+            <text class="notification-time">{{formatTime(item.createdAt)}}</text>
+          </view>
+          <view class="notification-body">{{item.content}}</view>
+        </view>
+        <view wx:if="{{!item.isRead}}" class="unread-dot"></view>
+      </view>
+    </view>
+
+    <!-- 加载更多 -->
+    <view wx:if="{{hasMore && notifications.length > 0}}" class="load-more" bind:tap="loadMore">
+      <text wx:if="{{!loadingMore}}">加载更多</text>
+      <loading wx:else></loading>
+    </view>
+  </view>
+</view>

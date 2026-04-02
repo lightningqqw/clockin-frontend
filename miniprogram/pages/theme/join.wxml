@@ -1,0 +1,47 @@
+<!-- 加入主题页 -->
+<view class="join-theme-page">
+  <navbar title="加入主题"></navbar>
+
+  <view class="page-content">
+    <card>
+      <view class="join-header">
+        <view class="join-icon">🔗</view>
+        <view class="join-title">输入邀请码</view>
+        <view class="join-desc">向朋友索要邀请码，加入他们的打卡主题</view>
+      </view>
+
+      <view class="form-group">
+        <view class="form-label">邀请码</view>
+        <input
+          class="code-input"
+          placeholder="请输入6位邀请码"
+          value="{{inviteCode}}"
+          bind:input="onInputChange"
+          maxlength="20"
+          type="text"
+        />
+        <view class="input-tips">邀请码区分大小写</view>
+      </view>
+
+      <view class="submit-area">
+        <custom-button
+          type="primary"
+          size="large"
+          round
+          loading="{{loading}}"
+          bind:tap="submit"
+        >立即加入</custom-button>
+      </view>
+    </card>
+
+    <!-- 提示信息 -->
+    <view class="tips-section">
+      <view class="tips-title">💡 如何获取邀请码？</view>
+      <view class="tips-list">
+        <view class="tip-item">1. 询问主题创建者，让他们分享邀请码</view>
+        <view class="tip-item">2. 点击主题详情页的"邀请"按钮获取邀请码</view>
+        <view class="tip-item">3. 邀请码有效期为30天</view>
+      </view>
+    </view>
+  </view>
+</view>

@@ -1,0 +1,8 @@
+{
+  "usingComponents": {
+    "navbar": "/components/common/navbar/index",
+    "checkin-card": "/components/business/checkin-card/index",
+    "loading": "/components/common/loading/index",
+    "empty": "/components/common/empty/index"
+  }
+}

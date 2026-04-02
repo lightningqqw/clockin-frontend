@@ -1,0 +1,54 @@
+<!-- 主题列表页 -->
+<view class="theme-list-page">
+  <navbar title="我的主题" showBack="{{false}}">
+    <view slot="right" class="header-action" bind:tap="showActionSheet">+</view>
+  </navbar>
+
+  <view class="page-content">
+    <!-- 标签切换 -->
+    <view class="tab-bar">
+      <view
+        class="tab-item {{activeTab === 'joined' ? 'active' : ''}}"
+        bind:tap="switchTab"
+        data-tab="joined"
+      >我加入的</view>
+      <view
+        class="tab-item {{activeTab === 'created' ? 'active' : ''}}"
+        bind:tap="switchTab"
+        data-tab="created"
+      >我创建的</view>
+    </view>
+
+    <!-- 主题列表 -->
+    <view wx:if="{{loading && !themes.length}}" class="loading-area">
+      <loading></loading>
+    </view>
+
+    <view wx:elif="{{!themes.length}}" class="empty-area">
+      <empty
+        title="暂无主题"
+        description="{{activeTab === 'joined' ? '去加入或创建一个主题开始打卡吧' : '创建一个主题，邀请朋友一起打卡'}}"
+      >
+        <custom-button type="primary" bind:tap="goToCreate">创建主题</custom-button>
+      </empty>
+    </view>
+
+    <view wx:else class="theme-list">
+      <theme-card
+        wx:for="{{filteredThemes}}"
+        wx:key="id"
+        theme="{{item}}"
+        showProgress="{{true}}"
+        progress="{{item.progress || 0}}"
+        bind:tap="goToDetail"
+      ></theme-card>
+    </view>
+
+    <!-- 底部按钮 -->
+    <view class="footer-actions">
+      <custom-button type="primary" size="large" round bind:tap="goToCreate">
+        <text>+ 创建主题</text>
+      </custom-button>
+    </view>
+  </view>
+</view>

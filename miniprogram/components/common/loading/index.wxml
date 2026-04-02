@@ -1,0 +1,11 @@
+<!-- 加载组件 -->
+<view class="loading-container {{fullScreen ? 'fullscreen' : ''}} {{mask ? 'mask' : ''}}">
+  <view class="loading-wrapper">
+    <view class="loading-spinner">
+      <view class="spinner-dot"></view>
+      <view class="spinner-dot"></view>
+      <view class="spinner-dot"></view>
+    </view>
+    <view wx:if="{{text}}" class="loading-text">{{text}}</view>
+  </view>
+</view>

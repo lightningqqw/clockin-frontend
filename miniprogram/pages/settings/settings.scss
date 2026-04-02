@@ -1,0 +1,49 @@
+/* 设置页面样式 */
+.page-content {
+  padding: 24rpx 24rpx 60rpx;
+}
+
+/* 菜单列表 */
+.menu-list {
+  display: flex;
+  flex-direction: column;
+}
+
+.menu-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 32rpx 0;
+  border-bottom: 2rpx solid #f5f5f5;
+}
+
+.menu-item:last-child {
+  border-bottom: none;
+}
+
+.menu-item:active {
+  opacity: 0.7;
+}
+
+.menu-text {
+  font-size: 30rpx;
+  color: #333;
+}
+
+.menu-value {
+  font-size: 28rpx;
+  color: #999;
+}
+
+.menu-arrow {
+  font-size: 32rpx;
+  color: #ccc;
+}
+
+/* 版本信息 */
+.version-info {
+  margin-top: 48rpx;
+  text-align: center;
+  font-size: 26rpx;
+  color: #999;
+}

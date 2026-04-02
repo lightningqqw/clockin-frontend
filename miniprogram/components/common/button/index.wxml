@@ -1,0 +1,13 @@
+<!-- 通用按钮组件 -->
+<button
+  class="custom-button {{type}} {{size}} {{plain ? 'plain' : ''}} {{round ? 'round' : ''}} {{disabled ? 'disabled' : ''}} {{loading ? 'loading' : ''}}"
+  style="{{customStyle}}"
+  disabled="{{disabled || loading}}"
+  open-type="{{openType}}"
+  bind:tap="onTap"
+>
+  <view class="button-content">
+    <view wx:if="{{loading}}" class="loading-icon"></view>
+    <slot></slot>
+  </view>
+</button>

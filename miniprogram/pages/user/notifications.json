@@ -1,0 +1,7 @@
+{
+  "usingComponents": {
+    "navbar": "/components/common/navbar/index",
+    "empty": "/components/common/empty/index",
+    "loading": "/components/common/loading/index"
+  }
+}

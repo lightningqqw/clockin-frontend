@@ -1,0 +1,50 @@
+<!-- 日历页面 -->
+<view class="calendar-page">
+  <navbar title="打卡日历"></navbar>
+
+  <view class="page-content">
+    <card>
+      <calendar
+        year="{{calendar.year}}"
+        month="{{calendar.month}}"
+        checkinDates="{{calendar.dates}}"
+        streakDays="{{streakDays}}"
+        bind:monthChange="onMonthChange"
+        bind:dayTap="onDayTap"
+      ></calendar>
+    </card>
+
+    <!-- 选中日期详情 -->
+    <view wx:if="{{selectedDate}}" class="day-detail">
+      <view class="detail-header">
+        <text class="detail-date">{{selectedDate}}</text>
+        <text wx:if="{{selectedCheckins.length > 0}}" class="detail-count">{{selectedCheckins.length}} 条记录</text>
+        <text wx:else class="detail-count no-checkin">未打卡</text>
+      </view>
+
+      <view wx:if="{{selectedCheckins.length > 0}}" class="checkin-list">
+        <view
+          wx:for="{{selectedCheckins}}"
+          wx:key="id"
+          class="checkin-item"
+          bind:tap="goToCheckinDetail"
+          data-id="{{item.id}}"
+        >
+          <image wx:if="{{item.user}}" class="user-avatar" src="{{item.user.avatarUrl}}" mode="aspectFill" />
+          <image wx:else class="user-avatar" src="/assets/default-avatar.png" mode="aspectFill" />
+          <view class="checkin-info">
+            <text wx:if="{{item.user}}" class="user-name">{{item.user.nickname}}</text>
+            <text wx:else class="user-name">匿名用户</text>
+            <text class="checkin-content">{{item.content}}</text>
+          </view>
+        </view>
+      </view>
+
+      <view wx:else class="no-data">
+        <text class="no-data-icon">📭</text>
+        <text class="no-data-text">这一天没有打卡记录</text>
+        <text wx:if="{{!isFuture}}" class="no-data-tip">可以补打卡哦</text>
+      </view>
+    </view>
+  </view>
+</view>

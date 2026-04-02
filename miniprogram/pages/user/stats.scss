@@ -1,0 +1,134 @@
+/* 统计页面样式 */
+.page-content {
+  padding: 24rpx 24rpx 60rpx;
+}
+
+/* 总体统计 */
+.stats-overview {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  padding: 32rpx 0;
+}
+
+.overview-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12rpx;
+}
+
+.overview-value {
+  font-size: 48rpx;
+  font-weight: 700;
+  color: #07c160;
+}
+
+.overview-label {
+  font-size: 26rpx;
+  color: #999;
+}
+
+.overview-divider {
+  width: 2rpx;
+  height: 80rpx;
+  background: #e5e5e5;
+}
+
+/* 周统计图表 */
+.weekly-chart {
+  display: flex;
+  justify-content: space-around;
+  align-items: flex-end;
+  padding: 48rpx 0 24rpx;
+  height: 300rpx;
+}
+
+.chart-bar-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16rpx;
+  flex: 1;
+}
+
+.bar-wrapper {
+  width: 40rpx;
+  height: 180rpx;
+  background: #f0f0f0;
+  border-radius: 20rpx;
+  overflow: hidden;
+  position: relative;
+}
+
+.bar-fill {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: #07c160;
+  border-radius: 20rpx;
+  transition: height 0.3s ease;
+  opacity: 0.3;
+}
+
+.bar-fill.active {
+  opacity: 1;
+}
+
+.bar-label {
+  font-size: 24rpx;
+  color: #999;
+}
+
+.bar-value {
+  font-size: 24rpx;
+  color: #07c160;
+  font-weight: 500;
+}
+
+/* 最近记录 */
+.recent-list {
+  display: flex;
+  flex-direction: column;
+}
+
+.recent-item {
+  display: flex;
+  align-items: center;
+  padding: 24rpx 0;
+  border-bottom: 2rpx solid #f5f5f5;
+}
+
+.recent-item:last-child {
+  border-bottom: none;
+}
+
+.recent-date {
+  width: 160rpx;
+  font-size: 26rpx;
+  color: #999;
+}
+
+.recent-content {
+  flex: 1;
+  font-size: 28rpx;
+  color: #333;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.recent-count {
+  width: 80rpx;
+  text-align: right;
+  font-size: 28rpx;
+  color: #07c160;
+  font-weight: 500;
+}
+
+/* 加载和空状态 */
+.loading-area,
+.empty-area {
+  padding: 80rpx 0;
+}

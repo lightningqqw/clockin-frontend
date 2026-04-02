@@ -1,0 +1,15 @@
+<!-- 卡片组件 -->
+<view class="custom-card {{shadow ? 'shadow' : ''}} {{border ? 'border' : ''}} {{hover ? 'hover' : ''}}"
+      style="{{customStyle}}"
+      bind:tap="onTap">
+  <view wx:if="{{title || extra}}" class="card-header">
+    <view wx:if="{{title}}" class="card-title">{{title}}</view>
+    <view wx:if="{{extra}}" class="card-extra">{{extra}}</view>
+  </view>
+  <view class="card-body">
+    <slot></slot>
+  </view>
+  <view wx:if="{{footer}}" class="card-footer">
+    {{footer}}
+  </view>
+</view>

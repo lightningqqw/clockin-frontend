@@ -1,0 +1,103 @@
+/* 日历页面样式 */
+.page-content {
+  padding: 24rpx 24rpx 60rpx;
+}
+
+/* 日期详情 */
+.day-detail {
+  margin-top: 32rpx;
+  background: #fff;
+  border-radius: 16rpx;
+  padding: 32rpx;
+}
+
+.detail-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 24rpx;
+  padding-bottom: 24rpx;
+  border-bottom: 2rpx solid #f0f0f0;
+}
+
+.detail-date {
+  font-size: 32rpx;
+  font-weight: 600;
+  color: #333;
+}
+
+.detail-count {
+  font-size: 28rpx;
+  color: #07c160;
+  font-weight: 500;
+}
+
+.detail-count.no-checkin {
+  color: #999;
+}
+
+/* 打卡列表 */
+.checkin-list {
+  display: flex;
+  flex-direction: column;
+  gap: 24rpx;
+}
+
+.checkin-item {
+  display: flex;
+  align-items: center;
+  padding: 20rpx;
+  background: #f8f8f8;
+  border-radius: 12rpx;
+}
+
+.user-avatar {
+  width: 80rpx;
+  height: 80rpx;
+  border-radius: 40rpx;
+  margin-right: 20rpx;
+}
+
+.checkin-info {
+  flex: 1;
+}
+
+.user-name {
+  font-size: 28rpx;
+  font-weight: 500;
+  color: #333;
+  margin-bottom: 8rpx;
+}
+
+.checkin-content {
+  font-size: 26rpx;
+  color: #666;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* 无数据 */
+.no-data {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 60rpx 0;
+}
+
+.no-data-icon {
+  font-size: 80rpx;
+  margin-bottom: 16rpx;
+}
+
+.no-data-text {
+  font-size: 28rpx;
+  color: #999;
+  margin-bottom: 8rpx;
+}
+
+.no-data-tip {
+  font-size: 24rpx;
+  color: #07c160;
+}

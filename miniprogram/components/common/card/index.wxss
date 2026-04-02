@@ -1,0 +1,53 @@
+/* 卡片组件样式 */
+.custom-card {
+  background: #fff;
+  border-radius: 16rpx;
+  overflow: hidden;
+}
+
+.custom-card.shadow {
+  box-shadow: 0 4rpx 20rpx rgba(0, 0, 0, 0.08);
+}
+
+.custom-card.border {
+  border: 2rpx solid #e5e5e5;
+}
+
+.custom-card.hover {
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.custom-card.hover:active {
+  transform: scale(0.98);
+}
+
+.card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 24rpx 32rpx;
+  border-bottom: 2rpx solid #f0f0f0;
+}
+
+.card-title {
+  font-size: 32rpx;
+  font-weight: 600;
+  color: #333;
+}
+
+.card-extra {
+  font-size: 26rpx;
+  color: #999;
+}
+
+.card-body {
+  padding: 24rpx 32rpx;
+}
+
+.card-footer {
+  padding: 20rpx 32rpx;
+  background: #fafafa;
+  font-size: 24rpx;
+  color: #999;
+  border-top: 2rpx solid #f0f0f0;
+}
