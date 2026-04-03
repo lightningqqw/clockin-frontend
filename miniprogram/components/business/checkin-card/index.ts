@@ -1,4 +1,5 @@
-import { ICheckin, MOOD_OPTIONS } from '../../../types/index';
+import { ICheckin } from '../../../types/index';
+import { MOOD_OPTIONS } from '../../../constants/index';
 import { relativeTime } from '../../../utils/date';
 
 Component({

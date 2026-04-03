@@ -147,6 +147,13 @@ class Request {
   upload<T>(url: string, filePath: string, name = 'file', formData?: Record<string, any>): Promise<T> {
     return new Promise((resolve, reject) => {
       const token = tokenStorage.get();
+
+      // 检查文件路径
+      if (!filePath) {
+        reject(new Error('文件路径不能为空'));
+        return;
+      }
+
       wx.uploadFile({
         url: `${this.baseURL}${url}`,
         filePath,
@@ -158,15 +165,34 @@ class Request {
         success: (res) => {
           if (res.statusCode >= 200 && res.statusCode < 300) {
             try {
-              resolve(JSON.parse(res.data) as T);
-            } catch {
-              resolve(res.data as T);
+              // 尝试解析 JSON 响应
+              const data = JSON.parse(res.data);
+              resolve(data as T);
+            } catch (e) {
+              // 如果不是 JSON，返回原始数据
+              resolve({ success: true, data: { url: res.data } } as T);
             }
+          } else if (res.statusCode === 401) {
+            // Token 过期
+            tokenStorage.remove();
+            wx.redirectTo({ url: '/pages/login/login' });
+            reject(new Error('登录已过期，请重新登录'));
           } else {
-            reject(new Error(`上传失败: ${res.statusCode}`));
+            // 尝试解析错误信息
+            let errorMsg = `上传失败: ${res.statusCode}`;
+            try {
+              const errorData = JSON.parse(res.data);
+              errorMsg = errorData.message || errorData.error || errorMsg;
+            } catch {
+              // 忽略解析错误
+            }
+            reject(new Error(errorMsg));
           }
         },
-        fail: reject,
+        fail: (err) => {
+          console.error('上传失败:', err);
+          reject(new Error(err.errMsg || '网络请求失败，请检查网络连接'));
+        },
       });
     });
   }

@@ -52,6 +52,14 @@ export interface ITheme {
   memberCount?: number;
 }
 
+// 位置信息
+export interface ILocationInfo {
+  latitude: number;
+  longitude: number;
+  address?: string;
+  name?: string;
+}
+
 // 打卡记录相关
 export interface ICheckin {
   id: string;
@@ -59,7 +67,7 @@ export interface ICheckin {
   userId: string;
   content: string;
   images?: string[];
-  location?: string;
+  location?: ILocationInfo;
   mood?: string;
   checkinDate: string;
   createdAt: string;

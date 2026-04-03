@@ -32,7 +32,7 @@ Page({
   },
 
   // 输入框变化
-  onInputChange(e: WechatMiniprogram.Input) {
+  onInputChange(e: any) {
     const { field } = e.currentTarget.dataset;
     this.setData({
       [`form.${field}`]: e.detail.value,
@@ -40,7 +40,7 @@ Page({
   },
 
   // 文本域变化
-  onTextareaChange(e: WechatMiniprogram.Textarea) {
+  onTextareaChange(e: any) {
     const { field } = e.currentTarget.dataset;
     this.setData({
       [`form.${field}`]: e.detail.value,
@@ -54,15 +54,20 @@ Page({
   },
 
   // 日期变化
-  onDateChange(e: WechatMiniprogram.Picker) {
+  onDateChange(e: any) {
     const { field } = e.currentTarget.dataset;
     this.setData({
       [`form.${field}`]: e.detail.value,
     });
   },
 
+  // 判断是否选中重复日期（供WXML使用）
+  isDaySelected(day: number): boolean {
+    return this.data.form.repeatDays.includes(day);
+  },
+
   // 时间变化
-  onTimeChange(e: WechatMiniprogram.Picker) {
+  onTimeChange(e: any) {
     this.setData({
       'form.reminderTime': e.detail.value,
     });
@@ -83,7 +88,7 @@ Page({
   },
 
   // 开关变化
-  onSwitchChange(e: WechatMiniprogram.Switch) {
+  onSwitchChange(e: any) {
     const { field } = e.currentTarget.dataset;
     this.setData({
       [`form.${field}`]: e.detail.value,
@@ -92,7 +97,12 @@ Page({
 
   // 提交
   async submit() {
-    const { form } = this.data;
+    const { form, submitting } = this.data;
+
+    // 防止重复提交
+    if (submitting) {
+      return;
+    }
 
     // 表单验证
     if (!form.title.trim()) {

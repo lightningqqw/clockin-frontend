@@ -18,6 +18,8 @@ Page({
     checkinDate: getToday(),
     moodOptions: MOOD_OPTIONS,
     submitting: false,
+    contentLength: 0,
+    uploadProgress: 0,
   },
 
   async onLoad(options) {
@@ -41,8 +43,12 @@ Page({
   },
 
   // 内容变化
-  onContentChange(e: WechatMiniprogram.Textarea) {
-    this.setData({ content: e.detail.value });
+  onContentChange(e: any) {
+    const content = e.detail.value;
+    this.setData({
+      content,
+      contentLength: content.length,
+    });
   },
 
   // 选择图片
@@ -51,18 +57,30 @@ Page({
     const count = 9 - images.length;
 
     try {
+      // 使用 wx.chooseMedia 选择图片
       const res = await wx.chooseMedia({
         count,
         mediaType: ['image'],
         sourceType: ['album', 'camera'],
+        sizeType: ['compressed'], // 使用压缩图片，减小上传大小
       });
+
+      if (!res.tempFiles || res.tempFiles.length === 0) {
+        return;
+      }
 
       const newImages = res.tempFiles.map((f) => f.tempFilePath);
       this.setData({
         images: [...images, ...newImages],
       });
-    } catch (err) {
-      // 用户取消
+    } catch (err: any) {
+      // 用户取消或其他错误
+      if (err.errMsg && err.errMsg.includes('cancel')) {
+        // 用户取消，不处理
+        return;
+      }
+      console.error('选择图片失败:', err);
+      showToast('选择图片失败，请重试', 'error');
     }
   },
 
@@ -100,7 +118,7 @@ Page({
   },
 
   // 日期变化
-  onDateChange(e: WechatMiniprogram.Picker) {
+  onDateChange(e: any) {
     this.setData({ checkinDate: e.detail.value });
   },
 
@@ -114,16 +132,26 @@ Page({
       return;
     }
 
-    this.setData({ submitting: true });
+    this.setData({ submitting: true, uploadProgress: 0 });
 
     try {
       // 上传图片
       let imageUrls: string[] = [];
       if (images.length > 0) {
-        for (const imagePath of images) {
-          const res = await uploadApi.uploadSingle(imagePath);
-          if (res.success && res.data) {
-            imageUrls.push(res.data.url);
+        for (let i = 0; i < images.length; i++) {
+          const imagePath = images[i];
+          try {
+            const res = await uploadApi.uploadSingle(imagePath);
+            if (res.success && res.data && res.data.url) {
+              imageUrls.push(res.data.url);
+              // 更新上传进度
+              this.setData({ uploadProgress: Math.round(((i + 1) / images.length) * 100) });
+            } else {
+              throw new Error(res.message || '图片上传失败');
+            }
+          } catch (uploadErr: any) {
+            console.error('图片上传失败:', uploadErr);
+            throw new Error(`第 ${i + 1} 张图片上传失败: ${uploadErr.message || '请重试'}`);
           }
         }
       }
@@ -144,12 +172,12 @@ Page({
           wx.navigateBack();
         }, 500);
       } else {
-        throw new Error(res.message);
+        throw new Error(res.message || '打卡失败');
       }
     } catch (err: any) {
       showToast(err.message || '打卡失败', 'error');
     } finally {
-      this.setData({ submitting: false });
+      this.setData({ submitting: false, uploadProgress: 0 });
     }
   },
 });

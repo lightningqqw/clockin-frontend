@@ -1,7 +1,7 @@
 import { userApi } from '../../services/auth';
 import { userStorage } from '../../utils/storage';
 import { ROUTES } from '../../constants/index';
-import { showToast, showModal } from '../../utils/index';
+import { showToast, showModal, updateTabBarSelected } from '../../utils/index';
 import { IUserStats } from '../../types/index';
 
 Page({
@@ -21,6 +21,8 @@ Page({
   },
 
   onShow() {
+    // 更新 TabBar 选中状态
+    updateTabBarSelected(2);
     this.loadUserInfo();
     this.loadUserStats();
     this.loadUnreadCount();

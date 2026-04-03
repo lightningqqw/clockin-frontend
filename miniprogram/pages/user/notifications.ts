@@ -87,9 +87,10 @@ Page({
     }
 
     // 根据通知类型跳转
-    if (item.data?.checkinId) {
+    const checkinId = item.data && item.data.checkinId ? item.data.checkinId : null;
+    if (checkinId) {
       wx.navigateTo({
-        url: `/pages/checkin/detail?id=${item.data.checkinId}`,
+        url: `/pages/checkin/detail?id=${checkinId}`,
       });
     }
   },

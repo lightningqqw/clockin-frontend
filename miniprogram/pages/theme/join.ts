@@ -8,7 +8,7 @@ Page({
     loading: false,
   },
 
-  onInputChange(e: WechatMiniprogram.Input) {
+  onInputChange(e: any) {
     this.setData({
       inviteCode: e.detail.value.trim().toUpperCase(),
     });

@@ -1,6 +1,7 @@
 /* 通知列表页样式 */
 .page-content {
   padding: 0;
+  padding-top: calc(44px + env(safe-area-inset-top));
 }
 
 .header-action {

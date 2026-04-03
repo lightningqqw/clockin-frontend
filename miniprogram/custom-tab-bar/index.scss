@@ -27,6 +27,20 @@
   height: 100rpx;
   padding: 10rpx 0;
   transition: all 0.2s;
+  /* 扩大点击区域 */
+  position: relative;
+}
+
+/* 点击反馈 */
+.tab-item:active {
+  opacity: 0.6;
+  transform: scale(0.95);
+}
+
+/* 禁用状态（正在切换中） */
+.tab-item.disabled {
+  pointer-events: none;
+  opacity: 0.5;
 }
 
 .tab-icon {

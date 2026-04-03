@@ -1,12 +1,13 @@
 import { themeApi } from '../../services/theme';
 import { checkinApi } from '../../services/checkin';
 import { ROUTES } from '../../constants/index';
-import { showToast, showModal } from '../../utils/index';
+import { showToast, showModal, updateTabBarSelected } from '../../utils/index';
 import { ITheme } from '../../types/index';
 
 Page({
   data: {
     themes: [] as Array<ITheme & { progress: number }>,
+    filteredThemes: [] as Array<ITheme & { progress: number }>,
     activeTab: 'joined', // 'joined' | 'created'
     loading: false,
     page: 1,
@@ -14,10 +15,12 @@ Page({
   },
 
   onLoad() {
-    this.loadThemes();
+    // onShow 会处理加载，避免重复调用
   },
 
   onShow() {
+    // 更新 TabBar 选中状态
+    updateTabBarSelected(1);
     this.loadThemes();
   },
 
@@ -31,17 +34,19 @@ Page({
   switchTab(e: WechatMiniprogram.TouchEvent) {
     const { tab } = e.currentTarget.dataset;
     this.setData({ activeTab: tab });
+    this.updateFilteredThemes();
   },
 
   // 加载主题列表
   async loadThemes() {
+    if (this.data.loading) return; // 防止重复加载
+
     this.setData({ loading: true });
     try {
       const res = await themeApi.getMyThemes(1, 100);
       if (res.success && res.data) {
         const themes = await Promise.all(
           res.data.list.map(async (theme) => {
-            // 获取进度数据
             const myCheckins = await checkinApi.getMyCheckins(theme.id);
             const totalDays = Math.ceil(
               (new Date(theme.endDate).getTime() - new Date(theme.startDate).getTime()) /
@@ -51,7 +56,18 @@ Page({
             return { ...theme, progress };
           })
         );
-        this.setData({ themes });
+
+        // 去重：确保不会有重复的主题
+        const uniqueThemes = themes.filter((theme, index, self) =>
+          index === self.findIndex((t) => t.id === theme.id)
+        );
+
+        if (uniqueThemes.length !== themes.length) {
+          console.warn('[ThemeList] 发现重复主题，已去重');
+        }
+
+        this.setData({ themes: uniqueThemes });
+        this.updateFilteredThemes();
       }
     } catch (err) {
       showToast('加载失败', 'error');
@@ -60,18 +76,25 @@ Page({
     }
   },
 
-  // 过滤后的主题
-  get filteredThemes() {
+  // 更新过滤后的主题列表
+  updateFilteredThemes() {
     const { themes, activeTab } = this.data;
     if (activeTab === 'created') {
-      return themes.filter((t) => t.role === 'creator');
+      this.setData({
+        filteredThemes: themes.filter((t: any) => t.role === 'creator'),
+      });
+    } else {
+      this.setData({ filteredThemes: themes });
     }
-    return themes;
   },
 
   // 去详情页
   goToDetail(e: WechatMiniprogram.TouchEvent) {
-    const { theme } = e.detail;
+    const theme = e.detail?.theme;
+    if (!theme || !theme.id) {
+      showToast('数据加载中，请稍后重试', 'error');
+      return;
+    }
     wx.navigateTo({
       url: `${ROUTES.THEME_DETAIL}?id=${theme.id}`,
     });

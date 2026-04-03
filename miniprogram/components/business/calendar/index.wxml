@@ -21,7 +21,7 @@
     <view
       wx:for="{{days}}"
       wx:key="date"
-      class="day-cell {{item.isCurrentMonth ? 'current-month' : 'other-month'}} {{item.isToday ? 'today' : ''}} {{item.hasCheckin ? 'has-checkin' : ''}} {{item.isFuture ? 'future' : ''}}"
+      class="day-cell {{item.isCurrentMonth ? 'current-month' : 'other-month'}} {{item.isToday ? 'today' : ''}} {{item.hasCheckin ? 'has-checkin' : ''}} {{item.isFuture ? 'future' : ''}} {{item.isSelected ? 'selected' : ''}}"
       bind:tap="onDayTap"
       data-day="{{item}}"
     >

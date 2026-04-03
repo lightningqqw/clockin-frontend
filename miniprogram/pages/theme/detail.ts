@@ -22,6 +22,9 @@ Page({
       month: new Date().getMonth() + 1,
       dates: [] as string[],
     },
+    selectedDate: '',
+    selectedCheckins: [] as ICheckin[],
+    showDateDetail: false,
   },
 
   onLoad(options) {
@@ -35,6 +38,8 @@ Page({
 
   onShow() {
     if (this.data.themeId) {
+      // 重置打卡状态，避免显示旧主题的状态
+      this.setData({ canCheckin: true });
       this.loadCheckins();
       this.checkCanCheckin();
     }
@@ -49,13 +54,14 @@ Page({
     try {
       const res = await themeApi.getThemeById(themeId);
       if (res.success && res.data) {
+        const userInfo = userStorage.get();
         this.setData({
           theme: res.data,
-          isCreator: res.data.role === 'creator',
+          isCreator: res.data.creatorId === userInfo?.id,
         });
-        this.loadCheckins();
-        this.loadCalendar();
-        this.checkCanCheckin();
+        await this.loadCheckins();
+        await this.loadCalendar();
+        await this.checkCanCheckin();
       }
     } catch (err) {
       showToast('加载失败', 'error');
@@ -67,12 +73,17 @@ Page({
   // 检查是否可以打卡
   async checkCanCheckin() {
     try {
+      console.log('[Debug] Checking can checkin for theme:', this.data.themeId);
       const res = await checkinApi.canCheckinToday(this.data.themeId);
+      console.log('[Debug] Can checkin response:', res);
       if (res.success) {
+        console.log('[Debug] Setting canCheckin to:', res.data?.canCheckin ?? true);
         this.setData({ canCheckin: res.data?.canCheckin ?? true });
       }
     } catch (err) {
       console.error('检查打卡状态失败:', err);
+      // 出错时默认允许打卡
+      this.setData({ canCheckin: true });
     }
   },
 
@@ -130,10 +141,56 @@ Page({
   },
 
   // 选择日期
-  onDayTap(e: WechatMiniprogram.TouchEvent) {
+  async onDayTap(e: WechatMiniprogram.TouchEvent) {
     const { day } = e.detail;
-    // 可以跳转到当天的打卡详情
-    showToast(`选择了 ${day.date}`);
+    const selectedDate = day.date;
+
+    this.setData({
+      selectedDate,
+      showDateDetail: true,
+    });
+
+    // 加载当天的打卡记录
+    try {
+      const res = await checkinApi.getThemeCheckins(this.data.themeId, 1, 100);
+      if (res.success && res.data) {
+        const selectedCheckins = res.data.list.filter((c) => {
+          // 优先使用 checkinDate 字段，否则使用 createdAt 的日期部分
+          if (c.checkinDate) {
+            return c.checkinDate === selectedDate;
+          }
+          if (c.createdAt) {
+            const createdDate = typeof c.createdAt === 'string'
+              ? c.createdAt.split('T')[0]
+              : new Date(c.createdAt).toISOString().split('T')[0];
+            return createdDate === selectedDate;
+          }
+          return false;
+        });
+        this.setData({ selectedCheckins });
+      }
+    } catch (err) {
+      console.error('加载打卡记录失败:', err);
+      showToast('加载失败', 'error');
+    }
+  },
+
+  // 关闭日期详情
+  closeDateDetail() {
+    this.setData({
+      showDateDetail: false,
+      selectedDate: '',
+      selectedCheckins: [],
+    });
+  },
+
+  // 去打卡详情（从日期详情中）
+  goToSelectedCheckinDetail(e: WechatMiniprogram.TouchEvent) {
+    const { id } = e.currentTarget.dataset;
+    if (!id) return;
+    wx.navigateTo({
+      url: `${ROUTES.CHECKIN_DETAIL}?id=${id}`,
+    });
   },
 
   // 去打卡
@@ -196,14 +253,47 @@ Page({
     });
   },
 
+  // 复制邀请码（点击邀请码区域）
+  async copyInviteCode() {
+    const { theme } = this.data;
+    if (!theme.inviteCode) return;
+    await setClipboard(theme.inviteCode);
+    showToast('邀请码已复制', 'success');
+  },
+
   // 加入主题
   async joinTheme() {
     wx.navigateTo({ url: ROUTES.THEME_JOIN });
   },
 
+  // 删除主题
+  async deleteTheme() {
+    const { theme } = this.data;
+    const confirmed = await showModal('确认删除', '删除后主题及所有打卡记录将无法恢复，是否继续？');
+    if (!confirmed) return;
+
+    try {
+      const res = await themeApi.deleteTheme(theme.id);
+      if (res.success) {
+        showToast('删除成功', 'success');
+        setTimeout(() => {
+          wx.navigateBack();
+        }, 500);
+      } else {
+        throw new Error(res.message);
+      }
+    } catch (err: any) {
+      showToast(err.message || '删除失败', 'error');
+    }
+  },
+
   // 去打卡详情
   goToCheckinDetail(e: WechatMiniprogram.TouchEvent) {
-    const { checkin } = e.detail;
+    const checkin = e.detail?.checkin;
+    if (!checkin || !checkin.id) {
+      showToast('数据加载中，请稍后重试', 'error');
+      return;
+    }
     wx.navigateTo({
       url: `${ROUTES.CHECKIN_DETAIL}?id=${checkin.id}`,
     });
@@ -211,7 +301,11 @@ Page({
 
   // 点赞
   async onLike(e: WechatMiniprogram.TouchEvent) {
-    const { checkin } = e.detail;
+    const checkin = e.detail?.checkin;
+    if (!checkin || !checkin.id) {
+      showToast('数据加载中，请稍后重试', 'error');
+      return;
+    }
     try {
       if (checkin.hasLiked) {
         await likeApi.removeLike(checkin.id);
@@ -226,7 +320,11 @@ Page({
 
   // 删除打卡
   async onDeleteCheckin(e: WechatMiniprogram.TouchEvent) {
-    const { checkin } = e.detail;
+    const checkin = e.detail?.checkin;
+    if (!checkin || !checkin.id) {
+      showToast('数据加载中，请稍后重试', 'error');
+      return;
+    }
     const confirmed = await showModal('确认删除', '删除后无法恢复，是否继续？');
     if (!confirmed) return;
 

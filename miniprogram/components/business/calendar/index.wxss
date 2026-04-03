@@ -101,6 +101,28 @@
   opacity: 0.6;
 }
 
+.day-cell.selected {
+  background: #576b95;
+  box-shadow: 0 4rpx 12rpx rgba(87, 107, 149, 0.3);
+}
+
+.day-cell.selected .day-number {
+  color: #fff;
+  font-weight: 600;
+}
+
+.day-cell.selected .checkin-indicator {
+  background: #fff;
+}
+
+.day-cell.selected.has-checkin {
+  background: #576b95;
+}
+
+.day-cell.selected.today {
+  background: #576b95;
+}
+
 .day-cell:active {
   transform: scale(0.95);
 }

@@ -8,6 +8,7 @@ interface ICalendarDay {
   isToday?: boolean;
   hasCheckin?: boolean;
   isFuture?: boolean;
+  isSelected?: boolean;
 }
 
 Component({
@@ -37,6 +38,10 @@ Component({
       type: Number,
       value: 0,
     },
+    selectedDate: {
+      type: String,
+      value: '',
+    },
   },
 
   data: {
@@ -59,7 +64,7 @@ Component({
   },
 
   observers: {
-    'year,month,checkinDates': function() {
+    'year,month,checkinDates,selectedDate': function() {
       this.generateDays();
     },
   },
@@ -67,7 +72,7 @@ Component({
   methods: {
     generateDays() {
       const today = getToday();
-      const { currentYear, currentMonth } = this.data;
+      const { currentYear, currentMonth, selectedDate } = this.data;
       const baseDays = getMonthDays(currentYear, currentMonth);
       const checkinSet = new Set(this.data.checkinDates);
 
@@ -76,6 +81,7 @@ Component({
         isToday: day.date === today,
         hasCheckin: checkinSet.has(day.date),
         isFuture: isFuture(day.date),
+        isSelected: day.date === selectedDate,
       }));
 
       // 计算统计

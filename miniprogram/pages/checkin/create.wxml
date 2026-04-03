@@ -19,7 +19,7 @@
         maxlength="1000"
         auto-height
       />
-      <view class="word-count">{{content.length}}/1000</view>
+      <view class="word-count">{{contentLength}}/1000</view>
     </card>
 
     <!-- 图片上传 -->
@@ -85,13 +85,20 @@
 
     <!-- 提交按钮 -->
     <view class="submit-area">
+      <view wx:if="{{submitting && uploadProgress > 0}}" class="upload-progress">
+        <text class="progress-text">图片上传中 {{uploadProgress}}%</text>
+        <view class="progress-bar">
+          <view class="progress-fill" style="width: {{uploadProgress}}%"></view>
+        </view>
+      </view>
       <custom-button
         type="primary"
         size="large"
         round
         loading="{{submitting}}"
+        disabled="{{submitting}}"
         bind:tap="submit"
-      >提交打卡</custom-button>
+      >{{submitting ? '提交中...' : '提交打卡'}}</custom-button>
     </view>
   </view>
 </view>

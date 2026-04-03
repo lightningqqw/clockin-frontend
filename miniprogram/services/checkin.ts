@@ -4,6 +4,7 @@ import {
   ICheckin,
   ICalendarDay,
   IPaginatedResponse,
+  ILocationInfo,
 } from '../types/index';
 
 /**
@@ -17,7 +18,7 @@ export const checkinApi = {
     themeId: string;
     content: string;
     images?: string[];
-    location?: string;
+    location?: ILocationInfo;
     mood?: string;
     checkinDate?: string;
   }): Promise<IApiResponse<ICheckin>> {

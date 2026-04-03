@@ -71,7 +71,19 @@ Page({
     try {
       const res = await checkinApi.getMyCheckins(this.data.themeId);
       if (res.success && res.data) {
-        const selectedCheckins = res.data.filter((c) => c.checkinDate === day.date || c.createdAt.startsWith(day.date));
+        const selectedCheckins = res.data.filter((c) => {
+          // 优先使用 checkinDate 字段，否则使用 createdAt 的日期部分
+          if (c.checkinDate) {
+            return c.checkinDate === day.date;
+          }
+          if (c.createdAt) {
+            const createdDate = typeof c.createdAt === 'string'
+              ? c.createdAt.split('T')[0]
+              : new Date(c.createdAt).toISOString().split('T')[0];
+            return createdDate === day.date;
+          }
+          return false;
+        });
         this.setData({ selectedCheckins });
       }
     } catch (err) {

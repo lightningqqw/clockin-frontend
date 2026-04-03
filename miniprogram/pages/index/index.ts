@@ -4,7 +4,7 @@ import { checkinApi } from '../../services/checkin';
 import { likeApi } from '../../services/like';
 import { userStorage } from '../../utils/storage';
 import { ROUTES } from '../../constants/index';
-import { showToast } from '../../utils/index';
+import { showToast, updateTabBarSelected } from '../../utils/index';
 import { ITheme, ICheckin } from '../../types/index';
 
 Page({
@@ -30,6 +30,8 @@ Page({
   },
 
   onShow() {
+    // 更新 TabBar 选中状态
+    updateTabBarSelected(0);
     // 每次显示页面时刷新数据
     if (this.data.userInfo) {
       this.loadData();
@@ -160,7 +162,11 @@ Page({
 
   // 去打卡详情
   goToCheckinDetail(e: WechatMiniprogram.TouchEvent) {
-    const { checkin } = e.detail;
+    const checkin = e.detail?.checkin;
+    if (!checkin || !checkin.id) {
+      showToast('数据加载中，请稍后重试', 'error');
+      return;
+    }
     wx.navigateTo({
       url: `${ROUTES.CHECKIN_DETAIL}?id=${checkin.id}`,
     });
@@ -168,7 +174,11 @@ Page({
 
   // 点赞
   async onLike(e: WechatMiniprogram.TouchEvent) {
-    const { checkin } = e.detail;
+    const checkin = e.detail?.checkin;
+    if (!checkin || !checkin.id) {
+      showToast('数据加载中，请稍后重试', 'error');
+      return;
+    }
     try {
       if (checkin.hasLiked) {
         await likeApi.removeLike(checkin.id);

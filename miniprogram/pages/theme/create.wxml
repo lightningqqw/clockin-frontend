@@ -83,7 +83,7 @@
           <view
             wx:for="{{repeatDays}}"
             wx:key="value"
-            class="day-tag {{form.repeatDays.includes(item.value) ? 'active' : ''}}"
+            class="day-tag {{isDaySelected(item.value) ? 'active' : ''}}"
             bind:tap="toggleRepeatDay"
             data-day="{{item.value}}"
           >{{item.label}}</view>
@@ -111,8 +111,9 @@
         size="large"
         round
         loading="{{submitting}}"
+        disabled="{{submitting}}"
         bind:tap="submit"
-      >创建主题</custom-button>
+      >{{submitting ? '创建中...' : '创建主题'}}</custom-button>
     </view>
   </view>
 </view>

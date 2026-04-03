@@ -20,6 +20,12 @@
           <text class="meta-tag">{{theme.type === 'simple' ? '简单打卡' : '富文本打卡'}}</text>
           <text class="meta-tag">{{theme.memberCount || 0}}人参与</text>
         </view>
+        <!-- 邀请码显示（仅创建者可见） -->
+        <view wx:if="{{isCreator && theme.inviteCode}}" class="invite-code-section" bind:tap="copyInviteCode">
+          <text class="invite-label">邀请码：</text>
+          <text class="invite-code">{{theme.inviteCode}}</text>
+          <text class="invite-hint">点击复制</text>
+        </view>
       </view>
     </view>
 
@@ -41,6 +47,10 @@
         <text class="action-icon">🔗</text>
         <text class="action-text">邀请</text>
       </view>
+      <view wx:if="{{isCreator}}" class="action-item delete" bind:tap="deleteTheme">
+        <text class="action-icon">🗑️</text>
+        <text class="action-text">删除</text>
+      </view>
     </view>
 
     <!-- 日历 -->
@@ -50,10 +60,44 @@
         month="{{calendar.month}}"
         checkinDates="{{calendar.dates}}"
         streakDays="{{streakDays}}"
+        selectedDate="{{selectedDate}}"
         bind:monthChange="onMonthChange"
         bind:dayTap="onDayTap"
       ></calendar>
     </card>
+
+    <!-- 选中日期的打卡详情 -->
+    <view wx:if="{{showDateDetail && selectedDate}}" class="date-detail-section">
+      <card title="{{selectedDate}} 打卡记录">
+        <view class="detail-header">
+          <text class="detail-title">{{selectedDate}} 的打卡</text>
+          <text class="close-btn" bind:tap="closeDateDetail">✕</text>
+        </view>
+
+        <view wx:if="{{selectedCheckins.length === 0}}" class="empty-area">
+          <empty title="暂无打卡" description="这一天还没有人打卡"></empty>
+        </view>
+
+        <view wx:else class="selected-checkin-list">
+          <view
+            wx:for="{{selectedCheckins}}"
+            wx:key="id"
+            class="selected-checkin-item"
+            bind:tap="goToSelectedCheckinDetail"
+            data-id="{{item.id}}"
+          >
+            <image wx:if="{{item.user}}" class="user-avatar-small" src="{{item.user.avatarUrl}}" mode="aspectFill" />
+            <image wx:else class="user-avatar-small" src="/assets/default-avatar.png" mode="aspectFill" />
+            <view class="checkin-info">
+              <text wx:if="{{item.user}}" class="user-name">{{item.user.nickname}}</text>
+              <text wx:else class="user-name">匿名用户</text>
+              <text class="checkin-content">{{item.content || '无内容'}}</text>
+            </view>
+            <text class="checkin-time">{{item.createdAt}}</text>
+          </view>
+        </view>
+      </card>
+    </view>
 
     <!-- 打卡记录 -->
     <view class="section">

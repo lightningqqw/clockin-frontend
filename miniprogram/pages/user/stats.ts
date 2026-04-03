@@ -28,6 +28,11 @@ Page({
     this.loadStats();
   },
 
+  async onShow() {
+    // 每次显示页面时刷新数据
+    this.loadStats();
+  },
+
   async loadStats() {
     this.setData({ loading: true });
     await Promise.all([
@@ -56,24 +61,62 @@ Page({
       const today = new Date();
       const weeklyStats: WeeklyStat[] = [];
 
+      // 获取最近7天的打卡数据
+      const themesRes = await themeApi.getMyThemes(1, 50);
+      if (!themesRes.success || !themesRes.data?.list) {
+        this.setData({ weeklyStats: [] });
+        return;
+      }
+
+      const dailyCounts: Record<string, number> = {};
+
+      // 获取所有主题的打卡记录
+      for (const theme of themesRes.data.list) {
+        const checkinsRes = await checkinApi.getMyCheckins(theme.id);
+        if (checkinsRes.success && checkinsRes.data) {
+          for (const checkin of checkinsRes.data) {
+            // 确保日期格式统一为 YYYY-MM-DD
+            let date = '';
+            if (checkin.checkinDate) {
+              date = checkin.checkinDate.split('T')[0]; // 处理 ISO 格式日期
+            } else if (checkin.createdAt) {
+              date = typeof checkin.createdAt === 'string'
+                ? checkin.createdAt.split('T')[0]
+                : new Date(checkin.createdAt).toISOString().split('T')[0];
+            }
+            if (date) {
+              dailyCounts[date] = (dailyCounts[date] || 0) + 1;
+            }
+          }
+        }
+      }
+
+      console.log('[Stats] Daily counts:', dailyCounts);
+
+      // 构建本周数据
+      const counts = Object.values(dailyCounts);
+      const maxCount = counts.length > 0 ? Math.max(...counts) : 1;
+
       for (let i = 6; i >= 0; i--) {
         const date = new Date(today);
         date.setDate(date.getDate() - i);
         const dateStr = formatDate(date, 'YYYY-MM-DD');
         const dayIndex = date.getDay();
+        const count = dailyCounts[dateStr] || 0;
 
-        // 这里简化处理，实际应该根据后端数据计算
         weeklyStats.push({
           day: dateStr,
           label: i === 0 ? '今天' : weekDays[dayIndex],
-          count: Math.floor(Math.random() * 5), // 示例数据
-          percentage: Math.floor(Math.random() * 100),
+          count: Number(count),
+          percentage: maxCount > 0 ? Math.round((count / maxCount) * 100) : 0,
         });
       }
 
+      console.log('[Stats] Weekly stats:', weeklyStats);
       this.setData({ weeklyStats });
     } catch (err) {
       console.error('加载周统计失败:', err);
+      this.setData({ weeklyStats: [] });
     }
   },
 

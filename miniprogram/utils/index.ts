@@ -162,6 +162,23 @@ export function getSafeArea(): { top: number; bottom: number; height: number } {
 }
 
 /**
+ * 更新自定义 TabBar 选中状态
+ * @param index 选中的 tab 索引
+ */
+export function updateTabBarSelected(index: number): void {
+  const pages = getCurrentPages();
+  if (pages.length === 0) return;
+
+  const currentPage = pages[pages.length - 1];
+  if (currentPage && currentPage.getTabBar) {
+    const tabBar = currentPage.getTabBar();
+    if (tabBar) {
+      tabBar.setData({ selected: index });
+    }
+  }
+}
+
+/**
  * 深拷贝
  */
 export function deepClone<T>(obj: T): T {
