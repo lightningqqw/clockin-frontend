@@ -3,7 +3,8 @@ import { themeApi } from '../../services/theme';
 import { uploadApi } from '../../services/upload';
 import { MOOD_OPTIONS } from '../../constants/index';
 import { ROUTES } from '../../constants/index';
-import { getToday, showToast, previewImage } from '../../utils/index';
+import { showToast, previewImage } from '../../utils/index';
+import { getToday } from '../../utils/date';
 
 Page({
   data: {
@@ -132,8 +133,8 @@ Page({
         themeId,
         content: content.trim(),
         images: imageUrls,
-        mood,
-        location,
+        mood: mood || undefined,
+        location: location ? { latitude: 39.9, longitude: 116.4, address: location } : undefined,
         checkinDate: theme.allowSupplement ? checkinDate : getToday(),
       });
 
