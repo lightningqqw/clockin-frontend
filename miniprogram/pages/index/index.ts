@@ -1,11 +1,10 @@
 import { userApi } from '../../services/auth';
 import { themeApi } from '../../services/theme';
 import { checkinApi } from '../../services/checkin';
-import { likeApi } from '../../services/like';
 import { userStorage } from '../../utils/storage';
 import { ROUTES } from '../../constants/index';
-import { showToast, updateTabBarSelected } from '../../utils/index';
-import { ITheme, ICheckin } from '../../types/index';
+import { updateTabBarSelected } from '../../utils/index';
+import { ITheme } from '../../types/index';
 
 Page({
   data: {
@@ -14,17 +13,26 @@ Page({
       themeCount: 0,
       checkinCount: 0,
     },
-    todayThemes: [] as Array<ITheme & { hasChecked: boolean }>,
-    checkins: [] as ICheckin[],
+    todayThemes: [] as Array<ITheme & { hasChecked: boolean; icon?: string; iconBgClass?: string }>,
     loading: false,
-    loadingMore: false,
-    hasMore: true,
-    page: 1,
-    limit: 20,
     checkedCount: 0,
+    progressPercent: 0,
+    completionRate: 0,
+    statusBarHeight: 44, // 默认状态栏高度
+    navBarHeight: 108, // 导航栏总高度（状态栏 + 内容区）
   },
 
   onLoad() {
+    // 获取系统信息，计算状态栏高度
+    const systemInfo = wx.getSystemInfoSync();
+    const statusBarHeight = systemInfo.statusBarHeight || 44;
+    // 导航栏总高度 = 状态栏高度 + 内容区高度(64rpx≈32px)
+    const navBarHeight = statusBarHeight + 32;
+    this.setData({
+      statusBarHeight,
+      navBarHeight,
+    });
+
     this.loadUserInfo();
     this.loadData();
   },
@@ -54,7 +62,6 @@ Page({
     this.setData({ loading: true });
     await Promise.all([
       this.loadTodayThemes(),
-      this.loadRecentCheckins(),
       this.loadUserStats(),
     ]);
     this.setData({ loading: false });
@@ -66,18 +73,51 @@ Page({
       const res = await themeApi.getMyThemes(1, 50);
       if (res.success && res.data) {
         const themes = res.data.list;
-        const todayThemes = [] as Array<ITheme & { hasChecked: boolean }>;
+        const todayThemes = [] as Array<ITheme & { hasChecked: boolean; icon?: string; iconBgClass?: string }>;
+
+        // 默认图标映射
+        const iconMap: { [key: string]: { icon: string; bgClass: string } } = {
+          '跑': { icon: '🏃', bgClass: 'icon-run' },
+          '步': { icon: '🏃', bgClass: 'icon-run' },
+          '晨': { icon: '🏃', bgClass: 'icon-run' },
+          '读': { icon: '📖', bgClass: 'icon-read' },
+          '书': { icon: '📖', bgClass: 'icon-read' },
+          '背': { icon: '🔤', bgClass: 'icon-study' },
+          '词': { icon: '🔤', bgClass: 'icon-study' },
+          '学': { icon: '🔤', bgClass: 'icon-study' },
+        };
 
         for (const theme of themes) {
           const checkinRes = await checkinApi.canCheckinToday(theme.id);
+
+          // 根据主题标题匹配图标
+          let iconData = { icon: '📝', bgClass: 'icon-default' };
+          for (const key in iconMap) {
+            if (theme.title && theme.title.includes(key)) {
+              iconData = iconMap[key];
+              break;
+            }
+          }
+
           todayThemes.push({
             ...theme,
-            hasChecked: checkinRes.data?.hasCheckedToday || false,
+            hasChecked: checkinRes.data && checkinRes.data.hasCheckedToday ? true : false,
+            icon: iconData.icon,
+            iconBgClass: iconData.bgClass,
           });
         }
 
         const checkedCount = todayThemes.filter((t) => t.hasChecked).length;
-        this.setData({ todayThemes, checkedCount });
+        const totalCount = todayThemes.length;
+        const progressPercent = totalCount > 0 ? (checkedCount / totalCount) * 100 : 0;
+        const completionRate = Math.round(progressPercent);
+
+        this.setData({
+          todayThemes,
+          checkedCount,
+          progressPercent,
+          completionRate,
+        });
       }
     } catch (err) {
       console.error('加载今日主题失败:', err);
@@ -101,48 +141,8 @@ Page({
     }
   },
 
-  // 加载最近动态
-  async loadRecentCheckins() {
-    try {
-      const { limit } = this.data;
-      const res = await themeApi.getMyThemes(1, 20);
-
-      if (res.success && res.data?.list) {
-        const themes = res.data.list;
-        const checkins: ICheckin[] = [];
-
-        for (const theme of themes) {
-          const checkinRes = await checkinApi.getThemeCheckins(theme.id, 1, 5);
-          if (checkinRes.success && checkinRes.data?.list) {
-            checkins.push(...checkinRes.data.list);
-          }
-        }
-
-        // 按时间排序
-        checkins.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
-
-        this.setData({
-          checkins: checkins.slice(0, limit),
-          hasMore: checkins.length >= limit,
-        });
-      }
-    } catch (err) {
-      console.error('加载动态失败:', err);
-    }
-  },
-
-  // 加载更多
-  async loadMore() {
-    if (this.data.loadingMore || !this.data.hasMore) return;
-
-    this.setData({ loadingMore: true });
-    // 这里可以实现分页加载逻辑
-    this.setData({ loadingMore: false, hasMore: false });
-  },
-
   // 刷新
   refresh() {
-    this.setData({ page: 1 });
     this.loadData();
   },
 
@@ -160,39 +160,6 @@ Page({
     }
   },
 
-  // 去打卡详情
-  goToCheckinDetail(e: WechatMiniprogram.TouchEvent) {
-    const checkin = e.detail?.checkin;
-    if (!checkin || !checkin.id) {
-      showToast('数据加载中，请稍后重试', 'error');
-      return;
-    }
-    wx.navigateTo({
-      url: `${ROUTES.CHECKIN_DETAIL}?id=${checkin.id}`,
-    });
-  },
-
-  // 点赞
-  async onLike(e: WechatMiniprogram.TouchEvent) {
-    const checkin = e.detail?.checkin;
-    if (!checkin || !checkin.id) {
-      showToast('数据加载中，请稍后重试', 'error');
-      return;
-    }
-    try {
-      if (checkin.hasLiked) {
-        await likeApi.removeLike(checkin.id);
-        showToast('取消点赞');
-      } else {
-        await likeApi.createLike(checkin.id);
-        showToast('点赞成功', 'success');
-      }
-      this.refresh();
-    } catch (err) {
-      showToast('操作失败', 'error');
-    }
-  },
-
   // 创建主题
   goToCreateTheme() {
     wx.navigateTo({ url: ROUTES.THEME_CREATE });
@@ -201,5 +168,15 @@ Page({
   // 加入主题
   goToJoinTheme() {
     wx.navigateTo({ url: ROUTES.THEME_JOIN });
+  },
+
+  // 跳转到创建/加入主题页面（通过FAB按钮）
+  goToCreateJoin() {
+    wx.navigateTo({ url: '/pages/theme/create-join/create-join' });
+  },
+
+  // 返回上一页
+  goBack() {
+    wx.navigateBack();
   },
 });

@@ -26,6 +26,7 @@ export const ROUTES = {
   CHECKIN_DETAIL: '/pages/checkin/detail',
   CHECKIN_CALENDAR: '/pages/checkin/calendar',
   USER_PROFILE: '/pages/user/profile',
+  USER_EDIT_PROFILE: '/pages/user/edit-profile',
   USER_STATS: '/pages/user/stats',
   USER_NOTIFICATIONS: '/pages/user/notifications',
   SETTINGS: '/pages/settings/settings',

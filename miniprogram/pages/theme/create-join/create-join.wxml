@@ -1,0 +1,61 @@
+<!-- 创建/加入主题选择页面 -->
+<view class="create-join-page">
+  <!-- 顶部导航栏 -->
+  <view class="header-bar" style="height: {{navBarHeight}}px; padding-top: {{statusBarHeight}}px;">
+    <view class="back-icon" bind:tap="goBack">
+      <view class="arrow-left"></view>
+    </view>
+    <view class="header-title">选择操作</view>
+    <view class="header-right"></view>
+  </view>
+
+  <view class="page-content" style="padding-top: {{navBarHeight + 24}}px;">
+    <!-- 说明文字 -->
+    <view class="intro-section">
+      <view class="intro-title">开启打卡之旅</view>
+      <view class="intro-desc">创建自己的打卡主题，或加入他人的主题一起坚持</view>
+    </view>
+
+    <!-- 选项卡片 -->
+    <view class="options-section">
+      <!-- 创建主题 -->
+      <view class="option-card create-card" bind:tap="goToCreate">
+        <view class="card-bg"></view>
+        <view class="card-content">
+          <view class="card-icon-wrapper">
+            <text class="card-icon">➕</text>
+          </view>
+          <view class="card-info">
+            <view class="card-title">创建主题</view>
+            <view class="card-desc">创建一个新的打卡主题，邀请好友加入</view>
+          </view>
+        </view>
+        <view class="card-arrow">
+          <text>→</text>
+        </view>
+      </view>
+
+      <!-- 加入主题 -->
+      <view class="option-card join-card" bind:tap="goToJoin">
+        <view class="card-bg"></view>
+        <view class="card-content">
+          <view class="card-icon-wrapper join-icon">
+            <text class="card-icon">🔗</text>
+          </view>
+          <view class="card-info">
+            <view class="card-title">加入主题</view>
+            <view class="card-desc">输入邀请码，加入他人的打卡主题</view>
+          </view>
+        </view>
+        <view class="card-arrow">
+          <text>→</text>
+        </view>
+      </view>
+    </view>
+
+    <!-- 底部提示 -->
+    <view class="footer-tip">
+      <text>选择一种方式，开始你的习惯养成之旅</text>
+    </view>
+  </view>
+</view>

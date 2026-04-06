@@ -1,104 +1,121 @@
-<!-- 创建打卡页 -->
+<!-- 创建打卡页 - 完全还原 Figma 设计稿 -->
 <view class="create-checkin-page">
-  <navbar title="打卡"></navbar>
+  <!-- 顶部导航栏 -->
+  <view class="header-bar" style="height: {{navBarHeight}}px; padding-top: {{statusBarHeight}}px;">
+    <view class="back-icon" bind:tap="goBack">
+      <view class="arrow-left"></view>
+    </view>
+    <view class="header-title">每日打卡</view>
+    <view class="publish-btn" bind:tap="submit">
+      <text>发布</text>
+    </view>
+  </view>
 
-  <view class="page-content">
-    <!-- 主题信息 -->
-    <view class="theme-info-bar">
-      <text class="label">打卡主题：</text>
-      <text class="value">{{themeTitle}}</text>
+  <view class="page-content" style="padding-top: {{navBarHeight + 16}}px;">
+    <!-- 进度指示器 -->
+    <view class="progress-indicator">
+      <view class="progress-segment active"></view>
+      <view class="progress-segment"></view>
+      <view class="progress-segment light"></view>
     </view>
 
-    <!-- 打卡内容 -->
-    <card title="打卡内容">
-      <textarea
-        class="content-input"
-        placeholder="记录今天的打卡内容..."
-        value="{{content}}"
-        bind:input="onContentChange"
-        maxlength="1000"
-        auto-height
-      />
-      <view class="word-count">{{contentLength}}/1000</view>
-    </card>
+    <!-- 页面标题 -->
+    <view class="page-header">
+      <view class="header-title-text">打卡内容与心情</view>
+      <view class="header-desc">记录这一刻的真实感受，赋予习惯灵魂。</view>
+    </view>
 
-    <!-- 图片上传 -->
-    <card title="图片（最多9张）">
-      <view class="image-uploader">
-        <view
-          wx:for="{{images}}"
-          wx:key="index"
-          class="image-item"
-        >
-          <image class="uploaded-image" src="{{item}}" mode="aspectFill" bind:tap="previewImage" data-url="{{item}}" />
-          <view class="delete-btn" bind:tap="removeImage" data-index="{{index}}">×</view>
+    <!-- 主卡片 -->
+    <view class="main-card">
+      <!-- 打卡内容输入 -->
+      <view class="content-section">
+        <textarea
+          class="content-input"
+          placeholder="记录今天的打卡内容..."
+          value="{{content}}"
+          bind:input="onContentChange"
+          maxlength="500"
+          auto-height
+        />
+        <view class="word-count">{{contentLength}} / 500</view>
+      </view>
+
+      <!-- 图片上传 -->
+      <view class="image-section">
+        <view class="section-header">
+          <text class="section-title">记录瞬间</text>
+          <text class="section-limit">最多9张</text>
         </view>
-        <view wx:if="{{images.length < 9}}" class="upload-btn" bind:tap="chooseImage">
-          <text class="upload-icon">+</text>
-          <text class="upload-text">添加图片</text>
+        <view class="image-grid">
+          <!-- 已上传图片 -->
+          <view
+            wx:for="{{images}}"
+            wx:key="index"
+            class="image-item"
+          >
+            <image class="uploaded-image" src="{{item}}" mode="aspectFill" bind:tap="previewImage" data-url="{{item}}" />
+            <view class="delete-btn" bind:tap="removeImage" data-index="{{index}}">×</view>
+          </view>
+          <!-- 添加按钮 -->
+          <view wx:if="{{images.length < 9}}" class="upload-btn" bind:tap="chooseImage">
+            <text class="upload-icon">+</text>
+          </view>
+          <!-- 占位格子 -->
+          <view wx:for="{{3 - (images.length % 3) - (images.length < 9 ? 1 : 0)}}" wx:key="index" class="image-placeholder"></view>
         </view>
       </view>
-    </card>
 
-    <!-- 心情选择 -->
-    <card title="今天的心情">
-      <view class="mood-selector">
-        <view
-          wx:for="{{moodOptions}}"
-          wx:key="value"
-          class="mood-item {{mood === item.value ? 'active' : ''}}"
-          bind:tap="selectMood"
-          data-mood="{{item.value}}"
-        >
-          <text class="mood-emoji">{{item.emoji}}</text>
-          <text class="mood-label">{{item.label}}</text>
+      <!-- 心情选择 -->
+      <view class="mood-section">
+        <view class="section-title">此刻心情</view>
+        <view class="mood-selector">
+          <view
+            wx:for="{{moodOptions}}"
+            wx:key="value"
+            class="mood-item {{mood === item.value ? 'active' : ''}}"
+            bind:tap="selectMood"
+            data-mood="{{item.value}}"
+          >
+            <text class="mood-emoji">{{item.emoji}}</text>
+          </view>
         </view>
       </view>
-    </card>
 
-    <!-- 位置 -->
-    <card title="位置信息" extra="{{location ? '已选择' : '未选择'}}">
-      <view class="location-row">
-        <view wx:if="{{location}}" class="location-info">
-          <text class="location-icon">📍</text>
-          <text class="location-text">{{location}}</text>
+      <!-- 位置选择 -->
+      <view class="location-section" bind:tap="getLocation">
+        <view class="location-left">
+          <view class="location-icon-wrapper">
+            <text class="location-icon">📍</text>
+          </view>
+          <view class="location-info">
+            <text class="location-title">{{location ? location : '选择位置'}}</text>
+            <text wx:if="{{!location}}" class="location-subtitle">让打卡足迹更完整</text>
+          </view>
         </view>
-        <view wx:else class="location-hint">添加位置信息</view>
-        <custom-button
-          type="default"
-          size="small"
-          plain
-          bind:tap="getLocation"
-        >{{location ? '重新选择' : '选择位置'}}</custom-button>
-      </view>
-    </card>
-
-    <!-- 打卡日期 -->
-    <card title="打卡日期" wx:if="{{theme.allowSupplement}}">
-      <picker mode="date" value="{{checkinDate}}" bind:change="onDateChange">
-        <view class="date-picker">
-          <text class="date-value">{{checkinDate}}</text>
-          <text class="picker-arrow">›</text>
-        </view>
-      </picker>
-    </card>
-
-    <!-- 提交按钮 -->
-    <view class="submit-area">
-      <view wx:if="{{submitting && uploadProgress > 0}}" class="upload-progress">
-        <text class="progress-text">图片上传中 {{uploadProgress}}%</text>
-        <view class="progress-bar">
-          <view class="progress-fill" style="width: {{uploadProgress}}%"></view>
+        <view class="location-arrow">
+          <text>›</text>
         </view>
       </view>
-      <custom-button
-        type="primary"
-        size="large"
-        round
-        loading="{{submitting}}"
-        disabled="{{submitting}}"
-        bind:tap="submit"
-      >{{submitting ? '提交中...' : '提交打卡'}}</custom-button>
+    </view>
+
+    <!-- 快捷按钮区 -->
+    <view class="quick-actions">
+      <view class="action-btn" bind:tap="generateAI">
+        <text class="action-icon">✍️</text>
+        <text class="action-text">生成AI灵感</text>
+      </view>
+      <view class="action-btn" bind:tap="viewHistory">
+        <text class="action-icon">📅</text>
+        <text class="action-text">查看往日灵感</text>
+      </view>
+    </view>
+
+    <!-- 上传进度 -->
+    <view wx:if="{{submitting && uploadProgress > 0}}" class="upload-progress">
+      <text class="progress-text">图片上传中 {{uploadProgress}}%</text>
+      <view class="progress-bar">
+        <view class="progress-fill" style="width: {{uploadProgress}}%"></view>
+      </view>
     </view>
   </view>
 </view>

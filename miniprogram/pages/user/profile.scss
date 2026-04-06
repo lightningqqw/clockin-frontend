@@ -1,147 +1,269 @@
-/* 个人中心页样式 */
-.page-content {
-  padding: 24rpx 24rpx 60rpx;
-  padding-top: calc(44px + env(safe-area-inset-top) + 24rpx);
+/* 个人中心页样式 - 完全还原 Figma 设计稿 */
+
+// 设计稿颜色变量
+$bg-color: #ddffe2;
+$card-bg: #cafdd4;
+$primary-dark: #0b361d;
+$primary-mid: #3b6447;
+$accent-green: #006b1b;
+$light-green: #91f78e;
+$lighter-green: #acecbb;
+$white: #ffffff;
+$menu-icon-bg: #b5f0c2;
+$logout-color: #b92902;
+$logout-border: rgba(249, 86, 48, 0.3);
+
+.profile-page {
+  min-height: 100vh;
+  background-color: $bg-color;
 }
 
-/* 用户信息卡片 */
-.user-profile-card {
-  position: relative;
-  height: 280rpx;
-  border-radius: 24rpx;
-  overflow: hidden;
-  margin-bottom: 24rpx;
-}
-
-.profile-bg {
-  position: absolute;
+/* 顶部导航栏 - 完全还原 Figma 设计稿 */
+.header-bar {
+  position: fixed;
   top: 0;
   left: 0;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-}
-
-.user-info {
-  position: relative;
+  right: 0;
+  backdrop-filter: blur(12rpx);
+  -webkit-backdrop-filter: blur(12rpx);
+  background-color: rgba(221, 255, 226, 0.8);
   display: flex;
   align-items: center;
-  height: 100%;
-  padding: 0 40rpx;
+  justify-content: space-between;
+  padding-left: 32rpx;
+  padding-right: 32rpx;
+  z-index: 100;
+  box-sizing: border-box;
 }
 
-.user-avatar-large {
-  width: 140rpx;
-  height: 140rpx;
-  border-radius: 70rpx;
-  border: 6rpx solid rgba(255, 255, 255, 0.3);
-  margin-right: 32rpx;
+.back-icon {
+  width: 48rpx;
+  height: 64rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
-.user-details {
-  flex: 1;
+.arrow-left {
+  width: 24rpx;
+  height: 24rpx;
+  border-left: 4rpx solid $accent-green;
+  border-bottom: 4rpx solid $accent-green;
+  transform: rotate(45deg);
 }
 
-.user-name {
-  font-size: 40rpx;
-  font-weight: 600;
-  color: #fff;
-  margin-bottom: 12rpx;
+.header-title {
+  font-size: 36rpx;
+  font-weight: 500;
+  color: $primary-dark;
+  height: 64rpx;
+  line-height: 64rpx;
 }
 
-.user-id {
-  font-size: 26rpx;
-  color: rgba(255, 255, 255, 0.8);
+.header-right {
+  width: 48rpx;
+  height: 64rpx;
 }
 
-.edit-btn {
-  padding: 12rpx 28rpx;
-  background: rgba(255, 255, 255, 0.2);
-  border-radius: 28rpx;
-  font-size: 26rpx;
-  color: #fff;
+/* 页面内容 */
+.page-content {
+  padding: 32rpx 48rpx;
+  padding-bottom: 160rpx;
 }
 
-/* 统计数据 */
-.stats-grid {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  padding: 32rpx 0;
-}
-
-.stat-item {
+/* 用户信息区 */
+.profile-header {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 12rpx;
+  padding: 48rpx 0 32rpx;
+  margin-bottom: 32rpx;
 }
 
-.stat-value {
-  font-size: 40rpx;
-  font-weight: 700;
-  color: #07c160;
+.avatar-wrapper {
+  position: relative;
+  margin-bottom: 32rpx;
+}
+
+.avatar-border {
+  width: 192rpx;
+  height: 192rpx;
+  border-radius: 50%;
+  border: 8rpx solid $lighter-green;
+  padding: 8rpx;
+  box-shadow: 0 12rpx 32rpx rgba(11, 54, 29, 0.08);
+  box-sizing: border-box;
+}
+
+.user-avatar {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+}
+
+.edit-badge {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  width: 48rpx;
+  height: 48rpx;
+  background-color: $accent-green;
+  border: 4rpx solid $bg-color;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.edit-icon {
+  font-size: 24rpx;
+  color: $white;
+}
+
+.user-name {
+  font-size: 32rpx;
+  font-weight: 500;
+  color: $primary-dark;
+  margin-bottom: 16rpx;
+}
+
+.user-bio {
+  font-size: 32rpx;
+  color: $primary-mid;
+}
+
+/* 统计数据网格 */
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 32rpx;
+  margin-bottom: 48rpx;
+}
+
+.stat-card {
+  background-color: $card-bg;
+  border-radius: 24rpx;
+  padding: 32rpx;
+  display: flex;
+  flex-direction: column;
+  gap: 8rpx;
 }
 
 .stat-label {
-  font-size: 24rpx;
-  color: #999;
+  font-size: 32rpx;
+  color: $primary-mid;
 }
 
-/* 菜单列表 */
-.menu-list {
-  background: #fff;
-  border-radius: 16rpx;
-  margin-top: 24rpx;
+.stat-value-row {
+  display: flex;
+  align-items: baseline;
+  gap: 8rpx;
+}
+
+.stat-number {
+  font-size: 48rpx;
+  font-weight: bold;
+  color: $accent-green;
+}
+
+.stat-unit {
+  font-size: 28rpx;
+  color: $primary-mid;
+  opacity: 0.7;
+}
+
+/* 菜单区域 */
+.menu-section {
+  margin-bottom: 48rpx;
+}
+
+.menu-title {
+  font-size: 24rpx;
+  color: $primary-mid;
+  text-transform: uppercase;
+  letter-spacing: 2.4rpx;
+  margin-bottom: 32rpx;
+  padding-left: 16rpx;
+}
+
+.menu-card {
+  background-color: $white;
+  border-radius: 32rpx;
   overflow: hidden;
+  box-shadow: 0 12rpx 32rpx rgba(11, 54, 29, 0.08);
 }
 
 .menu-item {
   display: flex;
   align-items: center;
+  justify-content: space-between;
   padding: 32rpx;
-  border-bottom: 2rpx solid #f5f5f5;
   transition: background 0.2s;
-}
-
-.menu-item:last-child {
-  border-bottom: none;
 }
 
 .menu-item:active {
   background: #f8f8f8;
 }
 
-.menu-icon {
-  font-size: 40rpx;
-  margin-right: 24rpx;
+.menu-left {
+  display: flex;
+  align-items: center;
+  gap: 32rpx;
 }
 
-.menu-text {
-  flex: 1;
-  font-size: 30rpx;
-  color: #333;
-}
-
-.badge {
-  min-width: 36rpx;
-  height: 36rpx;
-  padding: 0 10rpx;
-  background: #fa5151;
-  color: #fff;
-  border-radius: 18rpx;
-  font-size: 22rpx;
+.menu-icon-wrapper {
+  position: relative;
+  width: 80rpx;
+  height: 80rpx;
+  background-color: $menu-icon-bg;
+  border-radius: 16rpx;
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-right: 16rpx;
+}
+
+.menu-icon {
+  font-size: 40rpx;
+}
+
+.menu-badge {
+  position: absolute;
+  top: -8rpx;
+  right: -8rpx;
+  width: 20rpx;
+  height: 20rpx;
+  background-color: #b02500;
+  border: 4rpx solid $white;
+  border-radius: 50%;
+}
+
+.menu-text {
+  font-size: 32rpx;
+  color: $primary-dark;
 }
 
 .menu-arrow {
-  font-size: 32rpx;
-  color: #ccc;
+  font-size: 40rpx;
+  color: $primary-mid;
+  font-weight: 300;
 }
 
-/* 退出登录 */
-.logout-section {
-  margin-top: 48rpx;
+/* 退出登录按钮 */
+.logout-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 36rpx;
+  border: 4rpx solid $logout-border;
+  border-radius: 24rpx;
+  transition: all 0.2s;
+}
+
+.logout-btn:active {
+  background: rgba(249, 86, 48, 0.05);
+}
+
+.logout-btn text {
+  font-size: 32rpx;
+  color: $logout-color;
 }

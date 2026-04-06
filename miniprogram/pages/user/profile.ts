@@ -14,9 +14,20 @@ Page({
       totalLikes: 0,
     } as IUserStats,
     unreadCount: 0,
+    statusBarHeight: 44,
+    navBarHeight: 76,
   },
 
   onLoad() {
+    // 获取系统信息，计算状态栏高度
+    const systemInfo = wx.getSystemInfoSync();
+    const statusBarHeight = systemInfo.statusBarHeight || 44;
+    const navBarHeight = statusBarHeight + 32;
+    this.setData({
+      statusBarHeight,
+      navBarHeight,
+    });
+
     this.loadUserInfo();
   },
 
@@ -26,6 +37,11 @@ Page({
     this.loadUserInfo();
     this.loadUserStats();
     this.loadUnreadCount();
+  },
+
+  // 返回上一页
+  goBack() {
+    wx.navigateBack();
   },
 
   loadUserInfo() {
@@ -56,8 +72,7 @@ Page({
   },
 
   editProfile() {
-    // 编辑资料功能
-    showToast('编辑资料功能开发中');
+    wx.navigateTo({ url: '/pages/user/edit-profile' });
   },
 
   goToNotifications() {
@@ -90,7 +105,7 @@ Page({
 
     // 清除登录信息
     const app = getApp<IAppOption>();
-    if (app.logout) {
+    if (app && app.logout) {
       app.logout();
     } else {
       // 手动清除

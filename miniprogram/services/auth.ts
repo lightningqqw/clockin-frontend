@@ -8,8 +8,12 @@ export const authApi = {
   /**
    * 微信登录
    */
-  wechatLogin(code: string, userInfo: WechatMiniprogram.UserInfo): Promise<IApiResponse<ILoginResponse>> {
-    return request.post('/auth/wechat-login', { code, userInfo });
+  wechatLogin(code: string, userInfo?: WechatMiniprogram.UserInfo): Promise<IApiResponse<ILoginResponse>> {
+    const data: { code: string; userInfo?: WechatMiniprogram.UserInfo } = { code };
+    if (userInfo) {
+      data.userInfo = userInfo;
+    }
+    return request.post('/auth/wechat-login', data);
   },
 
   /**

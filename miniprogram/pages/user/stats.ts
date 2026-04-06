@@ -6,9 +6,11 @@ import { formatDate, getToday } from '../../utils/date';
 
 interface WeeklyStat {
   day: string;
+  shortLabel: string;
   label: string;
   count: number;
   percentage: number;
+  isToday: boolean;
 }
 
 Page({
@@ -20,17 +22,42 @@ Page({
       totalLikes: 0,
     },
     weeklyStats: [] as WeeklyStat[],
+    weeklyCheckinCount: 0,
     recentCheckins: [] as any[],
     loading: false,
+    statusBarHeight: 44,
+    navBarHeight: 76,
   },
 
   async onLoad() {
+    // 获取系统信息，计算状态栏高度
+    const systemInfo = wx.getSystemInfoSync();
+    const statusBarHeight = systemInfo.statusBarHeight || 44;
+    const navBarHeight = statusBarHeight + 32;
+    this.setData({
+      statusBarHeight,
+      navBarHeight,
+    });
+
     this.loadStats();
   },
 
   async onShow() {
     // 每次显示页面时刷新数据
     this.loadStats();
+  },
+
+  // 返回上一页
+  goBack() {
+    wx.navigateBack();
+  },
+
+  // 格式化点赞数
+  formatLikes(likes: number): string {
+    if (likes >= 1000) {
+      return (likes / 1000).toFixed(1) + 'k';
+    }
+    return String(likes);
   },
 
   async loadStats() {
@@ -56,14 +83,14 @@ Page({
 
   async loadWeeklyStats() {
     try {
-      // 获取本周每天的打卡数
       const weekDays = ['周日', '周一', '周二', '周三', '周四', '周五', '周六'];
+      const shortLabels = ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT'];
       const today = new Date();
       const weeklyStats: WeeklyStat[] = [];
 
       // 获取最近7天的打卡数据
       const themesRes = await themeApi.getMyThemes(1, 50);
-      if (!themesRes.success || !themesRes.data?.list) {
+      if (!themesRes.success || !themesRes.data || !themesRes.data.list) {
         this.setData({ weeklyStats: [] });
         return;
       }
@@ -75,10 +102,9 @@ Page({
         const checkinsRes = await checkinApi.getMyCheckins(theme.id);
         if (checkinsRes.success && checkinsRes.data) {
           for (const checkin of checkinsRes.data) {
-            // 确保日期格式统一为 YYYY-MM-DD
             let date = '';
             if (checkin.checkinDate) {
-              date = checkin.checkinDate.split('T')[0]; // 处理 ISO 格式日期
+              date = checkin.checkinDate.split('T')[0];
             } else if (checkin.createdAt) {
               date = typeof checkin.createdAt === 'string'
                 ? checkin.createdAt.split('T')[0]
@@ -91,29 +117,41 @@ Page({
         }
       }
 
-      console.log('[Stats] Daily counts:', dailyCounts);
-
-      // 构建本周数据
+      // 构建本周数据（从周日到周六）
+      const todayIndex = today.getDay();
       const counts = Object.values(dailyCounts);
       const maxCount = counts.length > 0 ? Math.max(...counts) : 1;
 
-      for (let i = 6; i >= 0; i--) {
+      // 计算本周有打卡的天数
+      let weeklyCheckinCount = 0;
+
+      for (let i = 0; i < 7; i++) {
         const date = new Date(today);
-        date.setDate(date.getDate() - i);
+        // 计算到本周日的偏移
+        const dayOffset = i - todayIndex;
+        date.setDate(date.getDate() + dayOffset);
         const dateStr = formatDate(date, 'YYYY-MM-DD');
         const dayIndex = date.getDay();
         const count = dailyCounts[dateStr] || 0;
 
+        if (count > 0) {
+          weeklyCheckinCount++;
+        }
+
         weeklyStats.push({
           day: dateStr,
-          label: i === 0 ? '今天' : weekDays[dayIndex],
+          label: weekDays[dayIndex],
+          shortLabel: shortLabels[dayIndex],
           count: Number(count),
           percentage: maxCount > 0 ? Math.round((count / maxCount) * 100) : 0,
+          isToday: dayOffset === 0,
         });
       }
 
-      console.log('[Stats] Weekly stats:', weeklyStats);
-      this.setData({ weeklyStats });
+      this.setData({
+        weeklyStats,
+        weeklyCheckinCount,
+      });
     } catch (err) {
       console.error('加载周统计失败:', err);
       this.setData({ weeklyStats: [] });
@@ -124,7 +162,7 @@ Page({
     try {
       // 获取最近的主题列表
       const themesRes = await themeApi.getMyThemes(1, 10);
-      if (themesRes.success && themesRes.data?.list) {
+      if (themesRes.success && themesRes.data && themesRes.data.list) {
         const recentCheckins = [];
 
         for (const theme of themesRes.data.list) {

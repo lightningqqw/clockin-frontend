@@ -1,54 +1,100 @@
-<!-- 主题列表页 -->
+<!-- 主题列表页 - 完全还原 Figma 设计稿 -->
 <view class="theme-list-page">
-  <navbar title="我的主题" showBack="{{false}}">
-    <view slot="right" class="header-action" bind:tap="showActionSheet">+</view>
-  </navbar>
+  <!-- 顶部导航栏 -->
+  <view class="header-bar" style="height: {{navBarHeight}}px; padding-top: {{statusBarHeight}}px;">
+    <view class="back-icon" bind:tap="goBack">
+      <view class="arrow-left"></view>
+    </view>
+    <view class="header-title">主题列表</view>
+    <view class="header-right"></view>
+  </view>
 
-  <view class="page-content">
-    <!-- 标签切换 -->
-    <view class="tab-bar">
+  <view class="page-content" style="padding-top: {{navBarHeight + 16}}px;">
+    <!-- Tab 切换器 -->
+    <view class="tab-switcher">
       <view
         class="tab-item {{activeTab === 'joined' ? 'active' : ''}}"
         bind:tap="switchTab"
         data-tab="joined"
-      >我加入的</view>
+      >
+        <text>我加入的</text>
+      </view>
       <view
         class="tab-item {{activeTab === 'created' ? 'active' : ''}}"
         bind:tap="switchTab"
         data-tab="created"
-      >我创建的</view>
+      >
+        <text>我创建的</text>
+      </view>
     </view>
 
-    <!-- 主题列表 -->
+    <!-- 加载状态 -->
     <view wx:if="{{loading && !themes.length}}" class="loading-area">
       <loading></loading>
     </view>
 
-    <view wx:elif="{{!themes.length}}" class="empty-area">
-      <empty
-        title="暂无主题"
-        description="{{activeTab === 'joined' ? '去加入或创建一个主题开始打卡吧' : '创建一个主题，邀请朋友一起打卡'}}"
-      >
-        <custom-button type="primary" bind:tap="goToCreate">创建主题</custom-button>
-      </empty>
+    <!-- 空状态 -->
+    <view wx:elif="{{!filteredThemes.length}}" class="empty-area">
+      <view class="empty-content">
+        <text class="empty-title">还没有加入任何主题</text>
+        <text class="empty-desc">点击右下角 + 创建或加入主题</text>
+      </view>
     </view>
 
-    <view wx:else class="theme-list">
-      <theme-card
+    <!-- 主题卡片列表 -->
+    <view wx:else class="theme-grid">
+      <view
         wx:for="{{filteredThemes}}"
         wx:key="id"
-        theme="{{item}}"
-        showProgress="{{true}}"
-        progress="{{item.progress || 0}}"
+        class="theme-card"
         bind:tap="goToDetail"
-      ></theme-card>
-    </view>
+        data-theme="{{item}}"
+      >
+        <!-- 卡片封面 -->
+        <view class="card-cover-wrapper">
+          <image
+            wx:if="{{item.coverImage}}"
+            class="card-cover"
+            src="{{item.coverImage}}"
+            mode="aspectFill"
+          />
+          <view wx:else class="card-cover-placeholder">
+            <text class="placeholder-icon">🎯</text>
+          </view>
+          <!-- 类型标签 -->
+          <view class="type-tag {{item.checkinType === 'rich' ? 'rich-text' : 'simple'}}">
+            <text>{{item.checkinType === 'rich' ? '富文本打卡' : '简单打卡'}}</text>
+          </view>
+        </view>
 
-    <!-- 底部按钮 -->
-    <view class="footer-actions">
-      <custom-button type="primary" size="large" round bind:tap="goToCreate">
-        <text>+ 创建主题</text>
-      </custom-button>
+        <!-- 卡片内容 -->
+        <view class="card-content">
+          <view class="card-header">
+            <text class="card-title">{{item.title}}</text>
+            <view class="member-count">
+              <text class="member-icon">👥</text>
+              <text class="member-num">{{item.memberCount || 0}}</text>
+            </view>
+          </view>
+
+          <!-- 进度条 -->
+          <view class="progress-section">
+            <view class="progress-labels">
+              <text class="progress-label">当前进度</text>
+              <text class="progress-percent">{{item.progress || 0}}%</text>
+            </view>
+            <view class="progress-bar">
+              <view class="progress-track"></view>
+              <view class="progress-fill" style="width: {{item.progress || 0}}%"></view>
+            </view>
+          </view>
+        </view>
+      </view>
     </view>
+  </view>
+
+  <!-- 悬浮添加按钮 -->
+  <view class="fab-button" bind:tap="goToCreateJoin">
+    <text class="fab-icon">+</text>
   </view>
 </view>

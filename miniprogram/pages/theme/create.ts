@@ -13,22 +13,38 @@ Page({
       startDate: getToday(),
       endDate: '',
       reminderTime: '',
-      repeatDays: [0, 1, 2, 3, 4, 5, 6], // 默认每天
+      repeatDays: [0, 1, 2, 3, 4, 5, 6],
       allowSupplement: true,
       isPublic: false,
       coverImage: '',
     },
     repeatDays: REPEAT_DAYS,
     submitting: false,
+    statusBarHeight: 44,
+    navBarHeight: 76,
   },
 
   onLoad() {
+    // 获取系统信息，计算状态栏高度
+    const systemInfo = wx.getSystemInfoSync();
+    const statusBarHeight = systemInfo.statusBarHeight || 44;
+    const navBarHeight = statusBarHeight + 32;
+    this.setData({
+      statusBarHeight,
+      navBarHeight,
+    });
+
     // 设置默认结束日期为30天后
     const endDate = new Date();
     endDate.setDate(endDate.getDate() + 30);
     this.setData({
       'form.endDate': endDate.toISOString().split('T')[0],
     });
+  },
+
+  // 返回上一页
+  goBack() {
+    wx.navigateBack();
   },
 
   // 输入框变化

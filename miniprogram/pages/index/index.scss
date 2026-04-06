@@ -1,176 +1,444 @@
-/* 首页样式 */
-.page-content {
-  padding: 24rpx;
-  padding-top: calc(44px + env(safe-area-inset-top) + 24rpx);
+/* 首页样式 - 完全还原 Figma 设计稿 */
+
+// 设计稿颜色变量
+$bg-color: #ddffe2;
+$card-bg: #cafdd4;
+$primary-dark: #0b361d;
+$primary-mid: #3b6447;
+$accent-green: #006b1b;
+$light-green: #91f78e;
+$lighter-green: #9df197;
+$btn-text: #d1ffc8;
+$white: #ffffff;
+
+.index-page {
+  min-height: 100vh;
+  background-color: $bg-color;
+  position: relative;
+  padding-bottom: 112rpx;
 }
 
-/* 用户卡片 */
-.user-card {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  border-radius: 24rpx;
-  padding: 32rpx;
-  margin-bottom: 32rpx;
-  color: #fff;
-}
-
-.user-info {
+/* 顶部导航栏 - 完全还原 Figma 设计稿 */
+.header-bar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  backdrop-filter: blur(12rpx);
+  -webkit-backdrop-filter: blur(12rpx);
+  background-color: rgba(221, 255, 226, 0.8);
   display: flex;
   align-items: center;
-  margin-bottom: 32rpx;
+  justify-content: space-between;
+  padding-left: 32rpx;
+  padding-right: 32rpx;
+  z-index: 100;
+  box-sizing: border-box;
 }
 
-.user-avatar {
-  width: 100rpx;
-  height: 100rpx;
-  border-radius: 50rpx;
-  margin-right: 24rpx;
-  border: 4rpx solid rgba(255, 255, 255, 0.3);
-}
-
-.user-meta {
-  flex: 1;
-}
-
-.user-name {
-  font-size: 36rpx;
-  font-weight: 600;
-  margin-bottom: 8rpx;
-}
-
-.user-stats {
-  font-size: 26rpx;
-  color: rgba(255, 255, 255, 0.8);
-}
-
-.quick-actions {
+.back-icon {
+  width: 48rpx;
+  height: 64rpx;
   display: flex;
-  gap: 24rpx;
+  align-items: center;
+  justify-content: center;
 }
 
-.action-item {
-  flex: 1;
+.arrow-left {
+  width: 24rpx;
+  height: 24rpx;
+  border-left: 4rpx solid $accent-green;
+  border-bottom: 4rpx solid $accent-green;
+  transform: rotate(45deg);
+}
+
+.header-title {
+  font-size: 36rpx;
+  font-weight: 500;
+  color: $accent-green;
+  height: 64rpx;
+  line-height: 64rpx;
+}
+
+.header-right {
+  width: 48rpx;
+  height: 64rpx;
+}
+
+/* 页面内容 - 需要考虑导航栏高度 */
+.page-content {
+  padding: 32rpx;
+  padding-bottom: 112rpx;
+  display: flex;
+  flex-direction: column;
+  gap: 32rpx;
+}
+
+/* Hero 进度卡片 */
+.hero-card {
+  background-color: $card-bg;
+  border-radius: 32rpx;
+  padding: 48rpx 48rpx 24rpx;
+  position: relative;
+  overflow: hidden;
+}
+
+.hero-bg-decor-top {
+  position: absolute;
+  width: 256rpx;
+  height: 256rpx;
+  background-color: rgba(145, 247, 142, 0.3);
+  border-radius: 50%;
+  filter: blur(32rpx);
+  right: -80rpx;
+  top: -80rpx;
+}
+
+.hero-bg-decor-bottom {
+  position: absolute;
+  width: 256rpx;
+  height: 256rpx;
+  background-color: rgba(157, 241, 151, 0.2);
+  border-radius: 50%;
+  filter: blur(32rpx);
+  left: -80rpx;
+  bottom: -80rpx;
+}
+
+.hero-content {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.progress-label {
+  font-size: 28rpx;
+  font-weight: bold;
+  color: $primary-mid;
+  margin-bottom: 16rpx;
+}
+
+.progress-circle-wrapper {
+  margin-bottom: 16rpx;
+}
+
+.progress-circle {
+  width: 320rpx;
+  height: 320rpx;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.progress-svg {
+  width: 100%;
+  height: 100%;
+  position: relative;
+}
+
+.circle-bg {
+  position: absolute;
+  inset: 0;
+  border: 24rpx solid rgba(0, 107, 27, 0.1);
+  border-radius: 50%;
+}
+
+.circle-progress {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  border: 24rpx solid $accent-green;
+  border-bottom-color: transparent;
+  border-left-color: transparent;
+  transform: rotate(-135deg);
+}
+
+.progress-text {
+  position: absolute;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  background: rgba(255, 255, 255, 0.2);
-  border-radius: 16rpx;
-  padding: 24rpx;
-  transition: background 0.2s;
 }
 
-.action-item:active {
-  background: rgba(255, 255, 255, 0.3);
+.progress-number {
+  font-size: 72rpx;
+  font-weight: bold;
+  color: $primary-dark;
+  line-height: 1;
 }
 
-.action-icon {
+.progress-sublabel {
+  font-size: 24rpx;
+  color: $primary-mid;
+  margin-top: 8rpx;
+  letter-spacing: 2.4rpx;
+}
+
+.motivation-text {
   font-size: 40rpx;
-  margin-bottom: 8rpx;
+  color: $primary-dark;
+  font-weight: 500;
 }
 
-.action-text {
-  font-size: 26rpx;
-  color: rgba(255, 255, 255, 0.9);
-}
-
-/* 区块样式 */
-.section {
-  margin-bottom: 32rpx;
+/* 今日打卡区域 */
+.today-section {
+  display: flex;
+  flex-direction: column;
+  gap: 24rpx;
 }
 
 .section-header {
   display: flex;
-  align-items: center;
+  align-items: flex-end;
   justify-content: space-between;
-  margin-bottom: 24rpx;
+  padding: 0 16rpx;
 }
 
-.section-title {
-  font-size: 32rpx;
-  font-weight: 600;
-  color: #333;
-}
-
-.section-count {
-  font-size: 28rpx;
-  color: #07c160;
-  font-weight: 500;
-}
-
-.section-more {
-  font-size: 26rpx;
-  color: #576b95;
-}
-
-/* 今日打卡 */
-.today-themes {
-  background: #fff;
-  border-radius: 16rpx;
-  overflow: hidden;
-}
-
-.today-theme-item {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 28rpx 32rpx;
-  border-bottom: 2rpx solid #f0f0f0;
-  transition: background 0.2s;
-}
-
-.today-theme-item:last-child {
-  border-bottom: none;
-}
-
-.today-theme-item:active {
-  background: #f8f8f8;
-}
-
-.today-theme-item.checked {
-  background: #f6ffed;
-}
-
-.theme-info {
+.header-left {
   display: flex;
   flex-direction: column;
   gap: 8rpx;
 }
 
-.theme-name {
-  font-size: 30rpx;
-  color: #333;
+.section-title {
+  font-size: 48rpx;
+  font-weight: 500;
+  color: $primary-dark;
+}
+
+.section-subtitle {
+  font-size: 28rpx;
+  color: $primary-mid;
+}
+
+.completion-badge {
+  background-color: $light-green;
+  padding: 8rpx 24rpx;
+  border-radius: 9999rpx;
+  font-size: 24rpx;
+  font-weight: bold;
+  color: #005e17;
+}
+
+/* 习惯列表 */
+.habit-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16rpx;
+}
+
+.habit-item {
+  background-color: $white;
+  border-radius: 24rpx;
+  padding: 40rpx;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  transition: transform 0.2s;
+}
+
+.habit-item:active {
+  transform: scale(0.98);
+}
+
+.habit-left {
+  display: flex;
+  align-items: center;
+  gap: 32rpx;
+}
+
+.habit-icon-wrapper {
+  width: 96rpx;
+  height: 96rpx;
+  border-radius: 32rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.habit-icon-wrapper.icon-run {
+  background-color: rgba(145, 247, 142, 0.4);
+}
+
+.habit-icon-wrapper.icon-read {
+  background-color: rgba(157, 241, 151, 0.3);
+}
+
+.habit-icon-wrapper.icon-study {
+  background-color: rgba(255, 152, 0, 0.2);
+}
+
+.habit-icon-wrapper.icon-default {
+  background-color: rgba(145, 247, 142, 0.3);
+}
+
+.habit-icon {
+  font-size: 48rpx;
+}
+
+.habit-info {
+  display: flex;
+  flex-direction: column;
+  gap: 8rpx;
+}
+
+.habit-name {
+  font-size: 32rpx;
+  color: $primary-dark;
   font-weight: 500;
 }
 
-.check-status {
-  font-size: 24rpx;
-  color: #07c160;
+.habit-status {
+  display: flex;
+  align-items: center;
+  gap: 8rpx;
 }
 
-.check-status.pending {
-  color: #999;
+.status-icon {
+  font-size: 24rpx;
+}
+
+.status-text {
+  font-size: 24rpx;
+}
+
+.status-text.completed {
+  color: $accent-green;
+}
+
+.status-text.pending {
+  color: $primary-mid;
+}
+
+.habit-right {
+  display: flex;
+  align-items: center;
+}
+
+.completed-check {
+  width: 80rpx;
+  height: 80rpx;
+  background-color: rgba(0, 107, 27, 0.1);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.completed-check .check-icon {
+  font-size: 40rpx;
+  color: $accent-green;
 }
 
 .checkin-btn {
-  padding: 12rpx 28rpx;
-  background: #07c160;
-  color: #fff;
-  border-radius: 28rpx;
-  font-size: 26rpx;
+  background-color: $accent-green;
+  color: $btn-text;
+  padding: 16rpx 40rpx;
+  border-radius: 9999rpx;
+  font-size: 28rpx;
   font-weight: 500;
+  box-shadow: 0 2rpx 4rpx rgba(0, 0, 0, 0.05);
 }
 
-/* 打卡列表 */
-.checkin-list {
-  margin-top: 16rpx;
+/* 空状态 */
+.empty-habits {
+  background-color: $white;
+  border-radius: 24rpx;
+  padding: 80rpx 40rpx;
+  text-align: center;
 }
 
+.empty-text {
+  font-size: 32rpx;
+  color: $primary-dark;
+  margin-bottom: 16rpx;
+}
+
+.empty-subtext {
+  font-size: 24rpx;
+  color: $primary-mid;
+}
+
+/* 激励名言卡片 */
+.quote-card {
+  height: 320rpx;
+  background-color: $primary-dark;
+  border-radius: 24rpx;
+  position: relative;
+  overflow: hidden;
+}
+
+.quote-bg {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(11, 54, 29, 0.9) 0%, rgba(11, 54, 29, 0.7) 100%);
+  mix-blend-mode: overlay;
+  opacity: 0.4;
+}
+
+.quote-content {
+  position: relative;
+  z-index: 1;
+  padding: 48rpx;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.quote-label {
+  font-size: 20rpx;
+  color: $light-green;
+  letter-spacing: 2rpx;
+  text-transform: uppercase;
+  margin-bottom: 16rpx;
+}
+
+.quote-text {
+  display: flex;
+  flex-direction: column;
+}
+
+.quote-text text {
+  font-size: 36rpx;
+  color: $white;
+  font-style: italic;
+  line-height: 1.6;
+}
+
+/* 悬浮添加按钮 */
+.fab-button {
+  position: fixed;
+  right: 48rpx;
+  bottom: 192rpx;
+  width: 112rpx;
+  height: 112rpx;
+  background-color: $accent-green;
+  border-radius: 32rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 24rpx 64rpx rgba(11, 54, 29, 0.2);
+  z-index: 50;
+}
+
+.fab-button:active {
+  transform: scale(0.95);
+}
+
+.fab-icon {
+  font-size: 56rpx;
+  color: $white;
+  font-weight: 300;
+}
+
+/* 加载和空状态区域 */
 .loading-area,
 .empty-area {
   padding: 80rpx 0;
-}
-
-.load-more {
-  padding: 40rpx 0;
   text-align: center;
 }

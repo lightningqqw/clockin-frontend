@@ -1,8 +1,6 @@
 {
-  "usingComponents": {
-    "navbar": "/components/common/navbar/index",
-    "card": "/components/common/card/index",
-    "custom-button": "/components/common/button/index",
-    "loading": "/components/common/loading/index"
-  }
+  "navigationBarTitleText": "创建主题",
+  "navigationBarBackgroundColor": "#ddffe2",
+  "navigationBarTextStyle": "black",
+  "usingComponents": {}
 }

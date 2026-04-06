@@ -1,0 +1,190 @@
+/* 创建/加入主题选择页面样式 */
+
+$bg-color: #ddffe2;
+$primary-dark: #0b361d;
+$primary-mid: #3b6447;
+$accent-green: #006b1b;
+$light-green: #91f78e;
+$card-bg: #cafdd4;
+$white: #ffffff;
+
+.create-join-page {
+  min-height: 100vh;
+  background-color: $bg-color;
+}
+
+/* 顶部导航栏 - 完全还原 Figma 设计稿 */
+.header-bar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  backdrop-filter: blur(12rpx);
+  -webkit-backdrop-filter: blur(12rpx);
+  background-color: rgba(221, 255, 226, 0.8);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-left: 32rpx;
+  padding-right: 32rpx;
+  z-index: 100;
+  box-sizing: border-box;
+}
+
+.back-icon {
+  width: 48rpx;
+  height: 64rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.arrow-left {
+  width: 24rpx;
+  height: 24rpx;
+  border-left: 4rpx solid $accent-green;
+  border-bottom: 4rpx solid $accent-green;
+  transform: rotate(45deg);
+}
+
+.header-title {
+  font-size: 36rpx;
+  font-weight: 500;
+  color: $accent-green;
+  height: 64rpx;
+  line-height: 64rpx;
+}
+
+.header-right {
+  width: 48rpx;
+  height: 64rpx;
+}
+
+/* 页面内容 - 需要考虑导航栏高度 */
+.page-content {
+  padding: 48rpx;
+  padding-bottom: 48rpx;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  box-sizing: border-box;
+}
+
+/* 说明区域 */
+.intro-section {
+  margin-bottom: 64rpx;
+  text-align: center;
+}
+
+.intro-title {
+  font-size: 48rpx;
+  font-weight: 600;
+  color: $primary-dark;
+  margin-bottom: 16rpx;
+}
+
+.intro-desc {
+  font-size: 28rpx;
+  color: $primary-mid;
+  line-height: 1.6;
+}
+
+/* 选项区域 */
+.options-section {
+  display: flex;
+  flex-direction: column;
+  gap: 32rpx;
+  flex: 1;
+}
+
+.option-card {
+  background-color: $white;
+  border-radius: 24rpx;
+  padding: 48rpx;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 8rpx 24rpx rgba(11, 54, 29, 0.06);
+  transition: transform 0.2s;
+}
+
+.option-card:active {
+  transform: scale(0.98);
+}
+
+.card-bg {
+  position: absolute;
+  top: -48rpx;
+  right: -48rpx;
+  width: 128rpx;
+  height: 128rpx;
+  background-color: rgba(145, 247, 142, 0.2);
+  border-radius: 50%;
+  filter: blur(32rpx);
+}
+
+.card-content {
+  display: flex;
+  align-items: center;
+  gap: 32rpx;
+  flex: 1;
+}
+
+.card-icon-wrapper {
+  width: 96rpx;
+  height: 96rpx;
+  background-color: $accent-green;
+  border-radius: 24rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.card-icon-wrapper.join-icon {
+  background-color: $light-green;
+}
+
+.card-icon {
+  font-size: 48rpx;
+}
+
+.card-info {
+  display: flex;
+  flex-direction: column;
+  gap: 8rpx;
+}
+
+.card-title {
+  font-size: 32rpx;
+  font-weight: 600;
+  color: $primary-dark;
+}
+
+.card-desc {
+  font-size: 24rpx;
+  color: $primary-mid;
+}
+
+.card-arrow {
+  width: 48rpx;
+  height: 48rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 32rpx;
+  color: $primary-mid;
+}
+
+/* 底部提示 */
+.footer-tip {
+  margin-top: auto;
+  padding-top: 64rpx;
+  text-align: center;
+}
+
+.footer-tip text {
+  font-size: 24rpx;
+  color: rgba(59, 100, 71, 0.6);
+}

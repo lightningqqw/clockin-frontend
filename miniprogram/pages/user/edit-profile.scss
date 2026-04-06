@@ -1,0 +1,297 @@
+/* 编辑个人资料页样式 - 完全还原 Figma 设计风格 */
+
+// 设计稿颜色变量
+$bg-color: #ddffe2;
+$card-bg: #cafdd4;
+$primary-dark: #0b361d;
+$primary-mid: #3b6447;
+$accent-green: #006b1b;
+$light-green: #91f78e;
+$lighter-green: #acecbb;
+$input-bg: #acecbb;
+$input-text: #568061;
+$white: #ffffff;
+$btn-text: #d1ffc8;
+
+.edit-profile-page {
+  min-height: 100vh;
+  background-color: $bg-color;
+}
+
+/* 顶部导航栏 */
+.header-bar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  backdrop-filter: blur(12rpx);
+  -webkit-backdrop-filter: blur(12rpx);
+  background-color: rgba(221, 255, 226, 0.8);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-left: 32rpx;
+  padding-right: 32rpx;
+  z-index: 100;
+  box-sizing: border-box;
+}
+
+.back-icon {
+  width: 48rpx;
+  height: 64rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.arrow-left {
+  width: 24rpx;
+  height: 24rpx;
+  border-left: 4rpx solid $accent-green;
+  border-bottom: 4rpx solid $accent-green;
+  transform: rotate(45deg);
+}
+
+.header-title {
+  font-size: 36rpx;
+  font-weight: 500;
+  color: $accent-green;
+  height: 64rpx;
+  line-height: 64rpx;
+}
+
+.header-right {
+  width: 48rpx;
+  height: 64rpx;
+}
+
+/* 页面内容 */
+.page-content {
+  padding: 32rpx 48rpx;
+  padding-bottom: 160rpx;
+}
+
+/* 头像编辑区 */
+.avatar-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 48rpx;
+}
+
+.avatar-wrapper {
+  position: relative;
+  width: 200rpx;
+  height: 200rpx;
+  margin-bottom: 24rpx;
+}
+
+.user-avatar {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  border: 8rpx solid $white;
+  box-shadow: 0 12rpx 32rpx rgba(11, 54, 29, 0.1);
+}
+
+.avatar-placeholder {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  background-color: $lighter-green;
+  border: 8rpx solid $white;
+  box-shadow: 0 12rpx 32rpx rgba(11, 54, 29, 0.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.avatar-icon {
+  font-size: 80rpx;
+}
+
+.avatar-edit-badge {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  width: 64rpx;
+  height: 64rpx;
+  background-color: $accent-green;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 6rpx solid $white;
+}
+
+.edit-icon {
+  font-size: 32rpx;
+}
+
+.avatar-tip {
+  font-size: 28rpx;
+  color: $primary-mid;
+}
+
+/* 表单卡片 */
+.form-card {
+  background-color: $white;
+  border-radius: 24rpx;
+  padding: 48rpx;
+  box-shadow: 0 12rpx 32rpx rgba(11, 54, 29, 0.04);
+  margin-bottom: 32rpx;
+}
+
+.form-item {
+  position: relative;
+}
+
+.textarea-item {
+  margin-top: 32rpx;
+}
+
+.form-label {
+  display: flex;
+  align-items: center;
+  gap: 16rpx;
+  margin-bottom: 24rpx;
+}
+
+.label-icon {
+  font-size: 32rpx;
+}
+
+.label-text {
+  font-size: 32rpx;
+  color: $primary-mid;
+}
+
+.form-input {
+  width: 100%;
+  height: 96rpx;
+  background-color: $input-bg;
+  border-radius: 16rpx;
+  padding: 0 32rpx;
+  font-size: 32rpx;
+  color: $primary-dark;
+  box-sizing: border-box;
+}
+
+.form-input::placeholder {
+  color: $input-text;
+}
+
+.form-textarea {
+  width: 100%;
+  min-height: 200rpx;
+  background-color: $input-bg;
+  border-radius: 16rpx;
+  padding: 32rpx;
+  font-size: 32rpx;
+  color: $primary-dark;
+  box-sizing: border-box;
+}
+
+.form-textarea::placeholder {
+  color: $input-text;
+}
+
+.input-count {
+  position: absolute;
+  right: 24rpx;
+  bottom: 24rpx;
+  font-size: 24rpx;
+  color: $input-text;
+}
+
+.textarea-count {
+  bottom: 24rpx;
+}
+
+.form-divider {
+  height: 2rpx;
+  background-color: rgba(0, 107, 27, 0.1);
+  margin: 32rpx 0;
+}
+
+/* 标签推荐区 */
+.tags-section {
+  margin-bottom: 48rpx;
+}
+
+.tags-title {
+  font-size: 28rpx;
+  color: $primary-mid;
+  margin-bottom: 24rpx;
+  display: block;
+}
+
+.tags-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16rpx;
+}
+
+.tag-item {
+  padding: 16rpx 32rpx;
+  background-color: $lighter-green;
+  border-radius: 32rpx;
+  font-size: 26rpx;
+  color: $primary-mid;
+  transition: all 0.2s;
+}
+
+.tag-item:active {
+  background-color: $light-green;
+  transform: scale(0.95);
+}
+
+/* 操作按钮 */
+.action-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 24rpx;
+}
+
+.submit-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 32rpx;
+  background: linear-gradient(168deg, $accent-green 0%, #005d16 100%);
+  border-radius: 9999rpx;
+  box-shadow: 0 10rpx 30rpx rgba(0, 107, 27, 0.2);
+
+  text {
+    font-size: 32rpx;
+    color: $btn-text;
+    font-weight: 500;
+  }
+
+  &:active {
+    opacity: 0.9;
+  }
+
+  &.disabled {
+    opacity: 0.6;
+  }
+}
+
+.reset-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 32rpx;
+  background-color: transparent;
+  border-radius: 9999rpx;
+  border: 2rpx solid $primary-mid;
+
+  text {
+    font-size: 32rpx;
+    color: $primary-mid;
+  }
+
+  &:active {
+    background-color: rgba(59, 100, 71, 0.1);
+  }
+}

@@ -1,87 +1,133 @@
-<!-- 个人中心页 -->
+<!-- 个人中心页 - 完全还原 Figma 设计稿 -->
 <view class="profile-page">
-  <navbar title="我的" showBack="{{false}}"></navbar>
+  <!-- 顶部导航栏 -->
+  <view class="header-bar" style="height: {{navBarHeight}}px; padding-top: {{statusBarHeight}}px;">
+    <view class="back-icon" bind:tap="goBack">
+      <view class="arrow-left"></view>
+    </view>
+    <view class="header-title">每日打卡</view>
+    <view class="header-right"></view>
+  </view>
 
-  <view class="page-content">
-    <!-- 用户信息卡片 -->
-    <view class="user-profile-card">
-      <image class="profile-bg" src="/assets/profile-bg.png" mode="aspectFill" />
-      <view class="user-info">
-        <image wx:if="{{userInfo}}" class="user-avatar-large" src="{{userInfo.avatarUrl}}" mode="aspectFill" />
-        <image wx:else class="user-avatar-large" src="/assets/default-avatar.png" mode="aspectFill" />
-        <view class="user-details">
-          <view wx:if="{{userInfo}}" class="user-name">{{userInfo.nickname}}</view>
-          <view wx:else class="user-name">用户</view>
-          <view wx:if="{{userInfo}}" class="user-id">ID: {{userInfo.id}}</view>
-          <view wx:else class="user-id">ID: --</view>
+  <view class="page-content" style="padding-top: {{navBarHeight + 16}}px;">
+    <!-- 用户信息区 -->
+    <view class="profile-header">
+      <view class="avatar-wrapper">
+        <view class="avatar-border">
+          <image
+            wx:if="{{userInfo}}"
+            class="user-avatar"
+            src="{{userInfo.avatarUrl}}"
+            mode="aspectFill"
+          />
+          <image
+            wx:else
+            class="user-avatar"
+            src="/assets/default-avatar.png"
+            mode="aspectFill"
+          />
         </view>
-        <view class="edit-btn" bind:tap="editProfile">
-          <text>编辑</text>
+        <view class="edit-badge" bind:tap="editProfile">
+          <text class="edit-icon">✓</text>
+        </view>
+      </view>
+      <view class="user-name">{{userInfo.nickname || '未设置昵称'}}</view>
+      <view class="user-bio">{{userInfo.bio || '点击编辑个人资料'}}</view>
+    </view>
+
+    <!-- 统计数据卡片 -->
+    <view class="stats-grid">
+      <view class="stat-card" bind:tap="goToStats">
+        <view class="stat-label">连续打卡</view>
+        <view class="stat-value-row">
+          <text class="stat-number">{{stats.streakDays || 0}}</text>
+          <text class="stat-unit">天</text>
+        </view>
+      </view>
+      <view class="stat-card" bind:tap="goToThemes">
+        <view class="stat-label">完成习惯</view>
+        <view class="stat-value-row">
+          <text class="stat-number">{{stats.totalCheckins || 0}}</text>
+          <text class="stat-unit">个</text>
         </view>
       </view>
     </view>
 
-    <!-- 统计数据 -->
-    <card>
-      <view class="stats-grid">
-        <view class="stat-item" bind:tap="goToThemes">
-          <text class="stat-value">{{stats.totalThemes}}</text>
-          <text class="stat-label">参与主题</text>
+    <!-- 功能菜单列表 -->
+    <view class="menu-section">
+      <view class="menu-title">账户与设置</view>
+      <view class="menu-card">
+        <!-- 我的通知 -->
+        <view class="menu-item" bind:tap="goToNotifications">
+          <view class="menu-left">
+            <view class="menu-icon-wrapper">
+              <text class="menu-icon">🔔</text>
+              <view wx:if="{{unreadCount > 0}}" class="menu-badge"></view>
+            </view>
+            <text class="menu-text">我的通知</text>
+          </view>
+          <view class="menu-arrow">
+            <text>›</text>
+          </view>
         </view>
-        <view class="stat-item" bind:tap="goToStats">
-          <text class="stat-value">{{stats.totalCheckins}}</text>
-          <text class="stat-label">总打卡</text>
+
+        <!-- 数据统计 -->
+        <view class="menu-item" bind:tap="goToStats">
+          <view class="menu-left">
+            <view class="menu-icon-wrapper">
+              <text class="menu-icon">📊</text>
+            </view>
+            <text class="menu-text">数据统计</text>
+          </view>
+          <view class="menu-arrow">
+            <text>›</text>
+          </view>
         </view>
-        <view class="stat-item">
-          <text class="stat-value">{{stats.streakDays}}</text>
-          <text class="stat-label">连续打卡</text>
+
+        <!-- 我的主题 -->
+        <view class="menu-item" bind:tap="goToThemes">
+          <view class="menu-left">
+            <view class="menu-icon-wrapper">
+              <text class="menu-icon">🎯</text>
+            </view>
+            <text class="menu-text">我的主题</text>
+          </view>
+          <view class="menu-arrow">
+            <text>›</text>
+          </view>
         </view>
-        <view class="stat-item">
-          <text class="stat-value">{{stats.totalLikes}}</text>
-          <text class="stat-label">获赞</text>
+
+        <!-- 设置 -->
+        <view class="menu-item" bind:tap="goToSettings">
+          <view class="menu-left">
+            <view class="menu-icon-wrapper">
+              <text class="menu-icon">⚙️</text>
+            </view>
+            <text class="menu-text">设置</text>
+          </view>
+          <view class="menu-arrow">
+            <text>›</text>
+          </view>
         </view>
-      </view>
-    </card>
 
-    <!-- 功能列表 -->
-    <view class="menu-list">
-      <view class="menu-item" bind:tap="goToNotifications">
-        <text class="menu-icon">🔔</text>
-        <text class="menu-text">我的通知</text>
-        <view wx:if="{{unreadCount > 0}}" class="badge">{{unreadCount}}</view>
-        <text class="menu-arrow">›</text>
-      </view>
-
-      <view class="menu-item" bind:tap="goToStats">
-        <text class="menu-icon">📊</text>
-        <text class="menu-text">数据统计</text>
-        <text class="menu-arrow">›</text>
-      </view>
-
-      <view class="menu-item" bind:tap="goToThemes">
-        <text class="menu-icon">🎯</text>
-        <text class="menu-text">我的主题</text>
-        <text class="menu-arrow">›</text>
-      </view>
-
-      <view class="menu-item" bind:tap="goToSettings">
-        <text class="menu-icon">⚙️</text>
-        <text class="menu-text">设置</text>
-        <text class="menu-arrow">›</text>
-      </view>
-
-      <view class="menu-item" bind:tap="showAbout">
-        <text class="menu-icon">ℹ️</text>
-        <text class="menu-text">关于</text>
-        <text class="menu-arrow">›</text>
+        <!-- 关于 -->
+        <view class="menu-item" bind:tap="showAbout">
+          <view class="menu-left">
+            <view class="menu-icon-wrapper">
+              <text class="menu-icon">ℹ️</text>
+            </view>
+            <text class="menu-text">关于</text>
+          </view>
+          <view class="menu-arrow">
+            <text>›</text>
+          </view>
+        </view>
       </view>
     </view>
 
     <!-- 退出登录 -->
-    <view class="logout-section">
-      <custom-button type="danger" size="large" round plain bind:tap="logout">
-        退出登录
-      </custom-button>
+    <view class="logout-btn" bind:tap="logout">
+      <text>退出登录</text>
     </view>
   </view>
 </view>

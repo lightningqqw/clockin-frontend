@@ -6,15 +6,45 @@ import { relativeTime } from '../../utils/date';
 Page({
   data: {
     notifications: [] as INotification[],
+    unreadNotifications: [] as INotification[],
+    readNotifications: [] as INotification[],
+    unreadCount: 0,
     loading: false,
     loadingMore: false,
     hasMore: true,
     page: 1,
     limit: 20,
+    statusBarHeight: 44,
+    navBarHeight: 76,
   },
 
   onLoad() {
+    // 获取系统信息，计算状态栏高度
+    const systemInfo = wx.getSystemInfoSync();
+    const statusBarHeight = systemInfo.statusBarHeight || 44;
+    const navBarHeight = statusBarHeight + 32;
+    this.setData({
+      statusBarHeight,
+      navBarHeight,
+    });
+
     this.loadNotifications();
+  },
+
+  // 返回上一页
+  goBack() {
+    wx.navigateBack();
+  },
+
+  // 分组通知
+  groupNotifications(notifications: INotification[]) {
+    const unread = notifications.filter(n => !n.isRead);
+    const read = notifications.filter(n => n.isRead);
+    return {
+      unreadNotifications: unread,
+      readNotifications: read,
+      unreadCount: unread.length,
+    };
   },
 
   async loadNotifications() {
@@ -22,8 +52,10 @@ Page({
     try {
       const res = await userApi.getNotifications(1, this.data.limit);
       if (res.success && res.data) {
+        const grouped = this.groupNotifications(res.data.list);
         this.setData({
           notifications: res.data.list,
+          ...grouped,
           hasMore: res.data.hasMore,
           page: 1,
         });
@@ -44,8 +76,11 @@ Page({
     try {
       const res = await userApi.getNotifications(nextPage, this.data.limit);
       if (res.success && res.data) {
+        const newNotifications = [...this.data.notifications, ...res.data.list];
+        const grouped = this.groupNotifications(newNotifications);
         this.setData({
-          notifications: [...this.data.notifications, ...res.data.list],
+          notifications: newNotifications,
+          ...grouped,
           hasMore: res.data.hasMore,
           page: nextPage,
         });
@@ -63,7 +98,11 @@ Page({
       showToast('已全部标记为已读', 'success');
       // 刷新列表
       const notifications = this.data.notifications.map((n) => ({ ...n, isRead: true }));
-      this.setData({ notifications });
+      const grouped = this.groupNotifications(notifications);
+      this.setData({
+        notifications,
+        ...grouped,
+      });
     } catch (err) {
       showToast('操作失败', 'error');
     }
@@ -80,7 +119,11 @@ Page({
         const notifications = this.data.notifications.map((n) =>
           n.id === item.id ? { ...n, isRead: true } : n
         );
-        this.setData({ notifications });
+        const grouped = this.groupNotifications(notifications);
+        this.setData({
+          notifications,
+          ...grouped,
+        });
       } catch (err) {
         console.error('标记已读失败:', err);
       }
@@ -100,6 +143,7 @@ Page({
       like: '❤️',
       comment: '💬',
       system: '📢',
+      achievement: '🏆',
     };
     return icons[type] || '📬';
   },

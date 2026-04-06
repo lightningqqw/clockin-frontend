@@ -6,10 +6,12 @@
     "pages/theme/detail",
     "pages/theme/create",
     "pages/theme/join",
+    "pages/theme/create-join/create-join",
     "pages/checkin/create",
     "pages/checkin/detail",
     "pages/checkin/calendar",
     "pages/user/profile",
+    "pages/user/edit-profile",
     "pages/user/stats",
     "pages/user/notifications"
   ],

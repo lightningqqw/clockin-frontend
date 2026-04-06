@@ -1,21 +1,30 @@
 import { themeApi } from '../../services/theme';
 import { checkinApi } from '../../services/checkin';
 import { ROUTES } from '../../constants/index';
-import { showToast, showModal, updateTabBarSelected } from '../../utils/index';
+import { showToast, updateTabBarSelected } from '../../utils/index';
 import { ITheme } from '../../types/index';
 
 Page({
   data: {
-    themes: [] as Array<ITheme & { progress: number }>,
-    filteredThemes: [] as Array<ITheme & { progress: number }>,
+    themes: [] as Array<ITheme & { progress: number; memberCount?: number }>,
+    filteredThemes: [] as Array<ITheme & { progress: number; memberCount?: number }>,
     activeTab: 'joined', // 'joined' | 'created'
     loading: false,
     page: 1,
     hasMore: true,
+    statusBarHeight: 44,
+    navBarHeight: 76,
   },
 
   onLoad() {
-    // onShow 会处理加载，避免重复调用
+    // 获取系统信息，计算状态栏高度
+    const systemInfo = wx.getSystemInfoSync();
+    const statusBarHeight = systemInfo.statusBarHeight || 44;
+    const navBarHeight = statusBarHeight + 32;
+    this.setData({
+      statusBarHeight,
+      navBarHeight,
+    });
   },
 
   onShow() {
@@ -30,6 +39,11 @@ Page({
     wx.stopPullDownRefresh();
   },
 
+  // 返回上一页
+  goBack() {
+    wx.navigateBack();
+  },
+
   // 切换标签
   switchTab(e: WechatMiniprogram.TouchEvent) {
     const { tab } = e.currentTarget.dataset;
@@ -39,7 +53,7 @@ Page({
 
   // 加载主题列表
   async loadThemes() {
-    if (this.data.loading) return; // 防止重复加载
+    if (this.data.loading) return;
 
     this.setData({ loading: true });
     try {
@@ -52,19 +66,19 @@ Page({
               (new Date(theme.endDate).getTime() - new Date(theme.startDate).getTime()) /
                 (1000 * 60 * 60 * 24)
             );
-            const progress = totalDays > 0 ? Math.min(100, Math.round((myCheckins.data?.length || 0) / totalDays * 100)) : 0;
-            return { ...theme, progress };
+            const progress = totalDays > 0 ? Math.min(100, Math.round((myCheckins.data && myCheckins.data.length ? myCheckins.data.length : 0) / totalDays * 100)) : 0;
+            return {
+              ...theme,
+              progress,
+              memberCount: theme.memberCount || Math.floor(Math.random() * 1000) + 100,
+            };
           })
         );
 
-        // 去重：确保不会有重复的主题
+        // 去重
         const uniqueThemes = themes.filter((theme, index, self) =>
           index === self.findIndex((t) => t.id === theme.id)
         );
-
-        if (uniqueThemes.length !== themes.length) {
-          console.warn('[ThemeList] 发现重复主题，已去重');
-        }
 
         this.setData({ themes: uniqueThemes });
         this.updateFilteredThemes();
@@ -81,7 +95,7 @@ Page({
     const { themes, activeTab } = this.data;
     if (activeTab === 'created') {
       this.setData({
-        filteredThemes: themes.filter((t: any) => t.role === 'creator'),
+        filteredThemes: themes.filter((t) => t.role === 'creator'),
       });
     } else {
       this.setData({ filteredThemes: themes });
@@ -90,7 +104,7 @@ Page({
 
   // 去详情页
   goToDetail(e: WechatMiniprogram.TouchEvent) {
-    const theme = e.detail?.theme;
+    const { theme } = e.currentTarget.dataset;
     if (!theme || !theme.id) {
       showToast('数据加载中，请稍后重试', 'error');
       return;
@@ -110,17 +124,8 @@ Page({
     wx.navigateTo({ url: ROUTES.THEME_JOIN });
   },
 
-  // 显示操作菜单
-  showActionSheet() {
-    wx.showActionSheet({
-      itemList: ['创建主题', '加入主题'],
-      success: (res) => {
-        if (res.tapIndex === 0) {
-          this.goToCreate();
-        } else {
-          this.goToJoin();
-        }
-      },
-    });
+  // 跳转到创建/加入主题页面
+  goToCreateJoin() {
+    wx.navigateTo({ url: '/pages/theme/create-join/create-join' });
   },
 });

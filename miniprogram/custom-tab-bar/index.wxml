@@ -1,14 +1,16 @@
-<!-- 自定义 TabBar -->
+<!-- 自定义 TabBar - 完全还原 Figma 设计稿 -->
 <view class="custom-tab-bar {{isIpx ? 'ipx' : ''}}">
-  <view
-    wx:for="{{list}}"
-    wx:key="index"
-    class="tab-item {{selected === index ? 'active' : ''}} {{switching ? 'disabled' : ''}}"
-    bind:tap="switchTab"
-    data-index="{{index}}"
-    data-url="{{item.pagePath}}"
-  >
-    <view class="tab-icon">{{selected === index ? item.selectedIconPath : item.iconPath}}</view>
-    <view class="tab-text">{{item.text}}</view>
+  <view class="tab-bar-bg">
+    <view
+      wx:for="{{list}}"
+      wx:key="index"
+      class="tab-item {{selected === index ? 'active' : ''}} {{switching ? 'disabled' : ''}}"
+      bind:tap="switchTab"
+      data-index="{{index}}"
+      data-url="{{item.pagePath}}"
+    >
+      <view class="tab-icon">{{item.iconPath}}</view>
+      <view class="tab-text">{{item.text}}</view>
+    </view>
   </view>
 </view>

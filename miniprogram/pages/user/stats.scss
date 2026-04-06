@@ -1,148 +1,386 @@
-/* 统计页面样式 */
+/* 数据统计页样式 - 完全还原 Figma 设计稿 */
+
+// 设计稿颜色变量
+$bg-color: #ddffe2;
+$card-bg: #cafdd4;
+$primary-dark: #0b361d;
+$primary-mid: #3b6447;
+$accent-green: #006b1b;
+$light-green: #91f78e;
+$lighter-green: #acecbb;
+$bento-bg: #b5f0c2;
+$white: #ffffff;
+
+.stats-page {
+  min-height: 100vh;
+  background-color: $bg-color;
+}
+
+/* 顶部导航栏 - 完全还原 Figma 设计稿 */
+.header-bar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  backdrop-filter: blur(12rpx);
+  -webkit-backdrop-filter: blur(12rpx);
+  background-color: rgba(221, 255, 226, 0.8);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-left: 32rpx;
+  padding-right: 32rpx;
+  z-index: 100;
+  box-sizing: border-box;
+}
+
+.back-icon {
+  width: 48rpx;
+  height: 64rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.arrow-left {
+  width: 24rpx;
+  height: 24rpx;
+  border-left: 4rpx solid $accent-green;
+  border-bottom: 4rpx solid $accent-green;
+  transform: rotate(45deg);
+}
+
+.header-title {
+  font-size: 36rpx;
+  font-weight: 500;
+  color: $primary-dark;
+  height: 64rpx;
+  line-height: 64rpx;
+}
+
+.header-right {
+  width: 48rpx;
+  height: 64rpx;
+}
+
+/* 页面内容 */
 .page-content {
-  padding: 24rpx 24rpx 60rpx;
-  padding-top: calc(44px + env(safe-area-inset-top) + 24rpx);
+  padding: 32rpx;
+  padding-bottom: 160rpx;
 }
 
-/* 总体统计 */
-.stats-overview {
-  display: flex;
-  align-items: center;
-  justify-content: space-around;
-  padding: 32rpx 0;
+/* 4列统计网格 */
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 32rpx;
+  margin-bottom: 32rpx;
 }
 
-.overview-item {
+.stats-card {
+  background-color: $white;
+  border-radius: 24rpx;
+  padding: 32rpx;
+  box-shadow: 0 12rpx 32rpx rgba(11, 54, 29, 0.04);
+}
+
+.stats-label {
+  font-size: 24rpx;
+  font-weight: 600;
+  color: $primary-mid;
+  margin-bottom: 16rpx;
+}
+
+.stats-value-row {
   display: flex;
-  flex-direction: column;
-  align-items: center;
+  align-items: baseline;
   gap: 12rpx;
 }
 
-.overview-value {
+.stats-value {
   font-size: 48rpx;
-  font-weight: 700;
-  color: #07c160;
+  font-weight: 500;
+  color: $primary-dark;
 }
 
-.overview-label {
-  font-size: 26rpx;
-  color: #999;
+.stats-icon {
+  font-size: 28rpx;
+
+  &.up {
+    color: $accent-green;
+  }
+
+  &.theme,
+  &.calendar {
+    font-size: 24rpx;
+  }
+
+  &.heart {
+    font-size: 24rpx;
+  }
 }
 
-.overview-divider {
-  width: 2rpx;
-  height: 80rpx;
-  background: #e5e5e5;
+/* 本周打卡趋势区域 */
+.trend-section {
+  background-color: $card-bg;
+  border-radius: 48rpx;
+  padding: 48rpx 32rpx;
+  margin-bottom: 32rpx;
 }
 
-/* 周统计图表 */
-.weekly-chart {
+.trend-header {
   display: flex;
-  justify-content: space-around;
-  align-items: flex-end;
-  padding: 48rpx 0 24rpx;
-  height: 300rpx;
+  align-items: flex-start;
+  justify-content: space-between;
+  margin-bottom: 48rpx;
 }
 
-.chart-bar-item {
+.trend-title-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8rpx;
+}
+
+.trend-title {
+  font-size: 40rpx;
+  font-weight: 500;
+  color: $primary-dark;
+}
+
+.trend-subtitle {
+  font-size: 28rpx;
+  color: $primary-mid;
+}
+
+.trend-badge {
+  display: flex;
+  align-items: center;
+  gap: 8rpx;
+  background-color: $lighter-green;
+  padding: 8rpx 24rpx;
+  border-radius: 9999rpx;
+}
+
+.trend-icon {
+  font-size: 24rpx;
+  color: $primary-mid;
+}
+
+.trend-percent {
+  font-size: 24rpx;
+  font-weight: 600;
+  color: $primary-mid;
+}
+
+/* 图表区域 */
+.chart-container {
+  position: relative;
+  height: 384rpx;
+}
+
+.chart-bars {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  height: 100%;
+  padding: 0 16rpx;
+  position: relative;
+  z-index: 2;
+}
+
+.bar-item {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 16rpx;
+  gap: 24rpx;
   flex: 1;
 }
 
 .bar-wrapper {
-  width: 40rpx;
-  height: 180rpx;
-  background: #f0f0f0;
-  border-radius: 20rpx;
-  overflow: hidden;
-  position: relative;
+  width: 64rpx;
+  height: 280rpx;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
 }
 
 .bar-fill {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  background: #07c160;
-  border-radius: 20rpx;
+  width: 100%;
+  background-color: $light-green;
+  border-radius: 16rpx 16rpx 0 0;
+  min-height: 8rpx;
+  position: relative;
   transition: height 0.3s ease;
-  opacity: 0.3;
-  min-height: 4rpx;
+
+  &.today {
+    background-color: $accent-green;
+    box-shadow: 0 0 40rpx rgba(0, 107, 27, 0.3);
+  }
 }
 
-.bar-fill.active {
-  opacity: 1;
-  background: #07c160;
-}
-
-.bar-fill.active::after {
-  content: '';
+.today-tooltip {
   position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 100%;
-  border-radius: 20rpx;
-  background: linear-gradient(180deg, #07c160 0%, #05a050 100%);
+  top: -80rpx;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: $primary-dark;
+  padding: 16rpx 32rpx;
+  border-radius: 16rpx;
+  white-space: nowrap;
+
+  text {
+    font-size: 22rpx;
+    color: $bg-color;
+  }
 }
 
 .bar-label {
   font-size: 24rpx;
-  color: #999;
+  font-weight: 600;
+  color: $primary-mid;
+
+  &.today-label {
+    color: $accent-green;
+    font-weight: 700;
+  }
 }
 
-.bar-value {
-  font-size: 24rpx;
-  color: #07c160;
-  font-weight: 500;
-}
-
-/* 最近记录 */
-.recent-list {
+/* 网格线 */
+.grid-lines {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 64rpx;
   display: flex;
   flex-direction: column;
+  justify-content: space-between;
+  opacity: 0.1;
+  z-index: 1;
 }
 
-.recent-item {
+.grid-line {
+  height: 2rpx;
+  background-color: $primary-dark;
+  width: 100%;
+}
+
+/* 本月最佳成就卡片 */
+.achievement-card {
+  background: linear-gradient(161deg, $accent-green 0%, #005d16 100%);
+  border-radius: 48rpx;
+  padding: 48rpx;
+  margin-bottom: 32rpx;
   display: flex;
   align-items: center;
-  padding: 24rpx 0;
-  border-bottom: 2rpx solid #f5f5f5;
-}
-
-.recent-item:last-child {
-  border-bottom: none;
-}
-
-.recent-date {
-  width: 160rpx;
-  font-size: 26rpx;
-  color: #999;
-}
-
-.recent-content {
-  flex: 1;
-  font-size: 28rpx;
-  color: #333;
+  justify-content: space-between;
+  box-shadow: 0 20rpx 50rpx rgba(0, 107, 27, 0.2);
+  position: relative;
   overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
 }
 
-.recent-count {
-  width: 80rpx;
-  text-align: right;
-  font-size: 28rpx;
-  color: #07c160;
+.achievement-content {
+  display: flex;
+  flex-direction: column;
+  gap: 16rpx;
+}
+
+.achievement-title {
+  font-size: 36rpx;
   font-weight: 500;
+  color: #d1ffc8;
 }
 
-/* 加载和空状态 */
-.loading-area,
-.empty-area {
-  padding: 80rpx 0;
+.achievement-desc {
+  font-size: 28rpx;
+  color: rgba(209, 255, 200, 0.8);
+}
+
+.achievement-icon-wrapper {
+  width: 120rpx;
+  height: 120rpx;
+  background-color: rgba(255, 255, 255, 0.1);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  backdrop-filter: blur(20rpx);
+}
+
+.achievement-icon {
+  font-size: 64rpx;
+}
+
+/* Bento 网格 */
+.bento-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 32rpx;
+  margin-bottom: 32rpx;
+}
+
+.bento-card {
+  background-color: $bento-bg;
+  border-radius: 32rpx;
+  padding: 32rpx;
+}
+
+.bento-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 32rpx;
+}
+
+.bento-icon {
+  font-size: 36rpx;
+}
+
+.bento-label {
+  font-size: 28rpx;
+  color: $primary-mid;
+}
+
+.bento-value {
+  font-size: 40rpx;
+  font-weight: 500;
+  color: $primary-dark;
+  margin-bottom: 8rpx;
+}
+
+.bento-desc {
+  font-size: 24rpx;
+  color: $primary-mid;
+}
+
+/* 每日灵感卡片 */
+.inspiration-card {
+  height: 400rpx;
+  border-radius: 48rpx;
+  overflow: hidden;
+  position: relative;
+  background: linear-gradient(135deg, rgba(11, 54, 29, 0.8) 0%, rgba(0, 107, 27, 0.6) 100%);
+}
+
+.inspiration-overlay {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 48rpx;
+  background: linear-gradient(to top, rgba(11, 54, 29, 0.9) 0%, rgba(11, 54, 29, 0) 100%);
+}
+
+.inspiration-tag {
+  font-size: 24rpx;
+  color: $bg-color;
+  opacity: 0.8;
+  margin-bottom: 16rpx;
+  letter-spacing: 2rpx;
+}
+
+.inspiration-text {
+  font-size: 36rpx;
+  color: $bg-color;
+  line-height: 1.5;
 }

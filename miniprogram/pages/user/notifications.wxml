@@ -1,42 +1,132 @@
-<!-- 通知列表页 -->
+<!-- 通知中心页 - 完全还原 Figma 设计稿 -->
 <view class="notifications-page">
-  <navbar title="我的通知">
-    <view wx:if="{{notifications.length > 0}}" slot="right" class="header-action" bind:tap="markAllRead">全部已读</view>
-  </navbar>
+  <!-- 顶部导航栏 -->
+  <view class="header-bar" style="height: {{navBarHeight}}px; padding-top: {{statusBarHeight}}px;">
+    <view class="back-icon" bind:tap="goBack">
+      <view class="arrow-left"></view>
+    </view>
+    <view class="header-title">通知中心</view>
+    <view class="header-right"></view>
+  </view>
 
-  <view class="page-content">
+  <view class="page-content" style="padding-top: {{navBarHeight + 16}}px;">
+    <!-- 加载状态 -->
     <view wx:if="{{loading && !notifications.length}}" class="loading-area">
       <loading></loading>
     </view>
 
+    <!-- 空状态 -->
     <view wx:elif="{{!notifications.length}}" class="empty-area">
-      <empty title="暂无通知" description="有新的消息会第一时间通知您"></empty>
+      <view class="empty-icon">📭</view>
+      <text class="empty-title">暂无通知</text>
+      <text class="empty-desc">有新的消息会第一时间通知您</text>
     </view>
 
-    <view wx:else class="notification-list">
-      <view
-        wx:for="{{notifications}}"
-        wx:key="id"
-        class="notification-item {{!item.isRead ? 'unread' : ''}}"
-        bind:tap="onNotificationTap"
-        data-item="{{item}}"
-      >
-        <view class="notification-icon">{{getIcon(item.type)}}</view>
-        <view class="notification-content">
-          <view class="notification-header">
-            <text class="notification-title">{{item.title}}</text>
-            <text class="notification-time">{{formatTime(item.createdAt)}}</text>
-          </view>
-          <view class="notification-body">{{item.content}}</view>
+    <view wx:else>
+      <!-- 页面标题区 -->
+      <view class="page-header">
+        <view class="header-title-group">
+          <text class="page-title">最新动态</text>
+          <text class="page-subtitle">你有 {{unreadCount}} 条未读消息</text>
         </view>
-        <view wx:if="{{!item.isRead}}" class="unread-dot"></view>
+        <view wx:if="{{notifications.length > 0}}" class="mark-all-btn" bind:tap="markAllRead">
+          <text>全部标为已读</text>
+        </view>
       </view>
-    </view>
 
-    <!-- 加载更多 -->
-    <view wx:if="{{hasMore && notifications.length > 0}}" class="load-more" bind:tap="loadMore">
-      <text wx:if="{{!loadingMore}}">加载更多</text>
-      <loading wx:else></loading>
+      <!-- 通知列表 -->
+      <view class="notification-list">
+        <!-- 未读通知 -->
+        <view
+          wx:for="{{unreadNotifications}}"
+          wx:key="id"
+          class="notification-card"
+          bind:tap="onNotificationTap"
+          data-item="{{item}}"
+        >
+          <view class="notification-main">
+            <!-- 图标 -->
+            <view class="notification-icon-wrapper {{item.type}}">
+              <text class="notification-icon">{{getIcon(item.type)}}</text>
+            </view>
+
+            <!-- 内容 -->
+            <view class="notification-content">
+              <view class="notification-header">
+                <text class="notification-title">{{item.title}}</text>
+                <text class="notification-time">{{formatTime(item.createdAt)}}</text>
+              </view>
+
+              <view class="notification-body">
+                <text class="notification-text">{{item.content}}</text>
+              </view>
+
+              <!-- 引用卡片（点赞/评论特有） -->
+              <view wx:if="{{item.type === 'like' && item.data && item.data.preview}}" class="quote-card like">
+                <view class="quote-thumb">
+                  <image wx:if="{{item.data.image}}" src="{{item.data.image}}" mode="aspectFill" class="thumb-image" />
+                  <view wx:else class="thumb-placeholder">📷</view>
+                </view>
+                <text class="quote-text">"{{item.data.preview}}"</text>
+              </view>
+
+              <view wx:if="{{item.type === 'comment' && item.data && item.data.comment}}" class="quote-card comment">
+                <text class="quote-text">"{{item.data.comment}}"</text>
+              </view>
+
+              <!-- 系统通知图片 -->
+              <view wx:if="{{item.type === 'system' && item.data && item.data.image}}" class="system-image-wrapper">
+                <image src="{{item.data.image}}" mode="aspectFill" class="system-image" />
+                <view class="system-image-overlay">
+                  <view class="system-btn">立即查看</view>
+                </view>
+              </view>
+            </view>
+          </view>
+
+          <!-- 未读红点 -->
+          <view class="unread-dot"></view>
+        </view>
+
+        <!-- 已读历史分隔 -->
+        <view wx:if="{{readNotifications.length > 0 && unreadNotifications.length > 0}}" class="history-divider">
+          <text>更早之前的通知</text>
+        </view>
+
+        <!-- 已读通知 -->
+        <view
+          wx:for="{{readNotifications}}"
+          wx:key="id"
+          class="notification-card read"
+          bind:tap="onNotificationTap"
+          data-item="{{item}}"
+        >
+          <view class="notification-main">
+            <!-- 图标 -->
+            <view class="notification-icon-wrapper {{item.type}}">
+              <text class="notification-icon">{{getIcon(item.type)}}</text>
+            </view>
+
+            <!-- 内容 -->
+            <view class="notification-content">
+              <view class="notification-header">
+                <text class="notification-title">{{item.title}}</text>
+                <text class="notification-time">{{formatTime(item.createdAt)}}</text>
+              </view>
+
+              <view class="notification-body">
+                <text class="notification-text">{{item.content}}</text>
+              </view>
+            </view>
+          </view>
+        </view>
+      </view>
+
+      <!-- 加载更多 -->
+      <view wx:if="{{hasMore && notifications.length > 0}}" class="load-more" bind:tap="loadMore">
+        <text wx:if="{{!loadingMore}}">加载更多</text>
+        <loading wx:else></loading>
+      </view>
     </view>
   </view>
 </view>

@@ -1,73 +1,129 @@
-<!-- 统计页面 -->
+<!-- 数据统计页 - 完全还原 Figma 设计稿 -->
 <view class="stats-page">
-  <navbar title="数据统计"></navbar>
+  <!-- 顶部导航栏 -->
+  <view class="header-bar" style="height: {{navBarHeight}}px; padding-top: {{statusBarHeight}}px;">
+    <view class="back-icon" bind:tap="goBack">
+      <view class="arrow-left"></view>
+    </view>
+    <view class="header-title">数据统计</view>
+    <view class="header-right"></view>
+  </view>
 
-  <view class="page-content">
-    <!-- 总体统计 -->
-    <card title="总体统计">
-      <view class="stats-overview">
-        <view class="overview-item">
-          <view class="overview-value">{{stats.totalCheckins}}</view>
-          <view class="overview-label">总打卡次数</view>
-        </view>
-        <view class="overview-divider"></view>
-        <view class="overview-item">
-          <view class="overview-value">{{stats.streakDays}}</view>
-          <view class="overview-label">连续打卡(天)</view>
-        </view>
-        <view class="overview-divider"></view>
-        <view class="overview-item">
-          <view class="overview-value">{{stats.totalThemes}}</view>
-          <view class="overview-label">参与主题</view>
+  <view class="page-content" style="padding-top: {{navBarHeight + 16}}px;">
+    <!-- 4列统计网格 -->
+    <view class="stats-grid">
+      <view class="stats-card">
+        <text class="stats-label">Total</text>
+        <view class="stats-value-row">
+          <text class="stats-value">{{stats.totalCheckins || 0}}</text>
+          <text class="stats-icon up">↑</text>
         </view>
       </view>
-    </card>
+      <view class="stats-card">
+        <text class="stats-label">Themes</text>
+        <view class="stats-value-row">
+          <text class="stats-value">{{stats.totalThemes || 0}}</text>
+          <text class="stats-icon theme">📋</text>
+        </view>
+      </view>
+      <view class="stats-card">
+        <text class="stats-label">Days</text>
+        <view class="stats-value-row">
+          <text class="stats-value">{{stats.streakDays || 0}}</text>
+          <text class="stats-icon calendar">📅</text>
+        </view>
+      </view>
+      <view class="stats-card">
+        <text class="stats-label">Likes</text>
+        <view class="stats-value-row">
+          <text class="stats-value">{{formatLikes(stats.totalLikes)}}</text>
+          <text class="stats-icon heart">❤️</text>
+        </view>
+      </view>
+    </view>
 
-    <!-- 本周打卡 -->
-    <card title="本周打卡">
-      <view wx:if="{{loading}}" class="loading-area">
-        <loading></loading>
+    <!-- 本周打卡趋势图表 -->
+    <view class="trend-section">
+      <view class="trend-header">
+        <view class="trend-title-group">
+          <text class="trend-title">本周打卡趋势</text>
+          <text class="trend-subtitle">坚持就是胜利，本周已打卡 {{weeklyCheckinCount}} 天</text>
+        </view>
+        <view class="trend-badge">
+          <text class="trend-icon">↗</text>
+          <text class="trend-percent">+12%</text>
+        </view>
       </view>
 
-      <view wx:elif="{{weeklyStats.length === 0}}" class="empty-area">
-        <empty title="暂无数据" description="本周还没有打卡记录"></empty>
-      </view>
-
-      <view wx:else class="weekly-chart">
-        <view
-          wx:for="{{weeklyStats}}"
-          wx:key="day"
-          class="chart-bar-item"
-        >
-          <view class="bar-wrapper">
-            <view
-              class="bar-fill {{item.count > 0 ? 'active' : ''}}"
-              style="height: {{item.percentage}}%"
-            ></view>
+      <!-- 柱状图 -->
+      <view class="chart-container">
+        <view class="chart-bars">
+          <view
+            wx:for="{{weeklyStats}}"
+            wx:key="day"
+            class="bar-item"
+          >
+            <view class="bar-wrapper">
+              <view
+                wx:if="{{item.count > 0}}"
+                class="bar-fill {{item.isToday ? 'today' : ''}}"
+                style="height: {{item.percentage}}%"
+              >
+                <view wx:if="{{item.isToday}}" class="today-tooltip">
+                  <text>今日 {{item.count}} 次</text>
+                </view>
+              </view>
+            </view>
+            <text class="bar-label {{item.isToday ? 'today-label' : ''}}">{{item.shortLabel}}</text>
           </view>
-          <view class="bar-label">{{item.label}}</view>
-          <view class="bar-value">{{item.count}}</view>
+        </view>
+        <!-- 网格线 -->
+        <view class="grid-lines">
+          <view class="grid-line"></view>
+          <view class="grid-line"></view>
+          <view class="grid-line"></view>
+          <view class="grid-line"></view>
         </view>
       </view>
-    </card>
+    </view>
 
-    <!-- 最近打卡 -->
-    <card title="最近打卡记录">
-      <view wx:if="{{recentCheckins.length === 0}}" class="empty-area">
-        <empty title="暂无记录"></empty>
+    <!-- 本月最佳成就 -->
+    <view class="achievement-card">
+      <view class="achievement-content">
+        <text class="achievement-title">本月最佳成就</text>
+        <text class="achievement-desc">已连续打卡 {{stats.streakDays || 0}} 天，超越 98% 用户</text>
       </view>
+      <view class="achievement-icon-wrapper">
+        <text class="achievement-icon">🏆</text>
+      </view>
+    </view>
 
-      <view wx:else class="recent-list">
-        <view
-          wx:for="{{recentCheckins}}"
-          wx:key="id"
-          class="recent-item"
-        >
-          <view class="recent-date">{{item.date}}</view>
-          <view class="recent-content">{{item.themeTitle}}</view>
-          <view class="recent-count">+{{item.count}}</view>
+    <!-- 次要成就 Bento -->
+    <view class="bento-grid">
+      <view class="bento-card">
+        <view class="bento-header">
+          <text class="bento-icon time">⏱️</text>
+          <text class="bento-label">时长</text>
         </view>
+        <text class="bento-value">45.2h</text>
+        <text class="bento-desc">本周累计耗时</text>
       </view>
-    </card>
+      <view class="bento-card">
+        <view class="bento-header">
+          <text class="bento-icon active">🔥</text>
+          <text class="bento-label">活跃</text>
+        </view>
+        <text class="bento-value">Level 8</text>
+        <text class="bento-desc">当前的等级状态</text>
+      </view>
+    </view>
+
+    <!-- 每日灵感卡片 -->
+    <view class="inspiration-card">
+      <view class="inspiration-overlay">
+        <text class="inspiration-tag">每日灵感</text>
+        <text class="inspiration-text">记录每一个细微的改变，它们终将成就伟大的跨越。</text>
+      </view>
+    </view>
   </view>
 </view>

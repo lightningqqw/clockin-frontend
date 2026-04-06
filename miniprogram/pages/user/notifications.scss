@@ -1,95 +1,354 @@
-/* 通知列表页样式 */
+/* 通知中心页样式 - 完全还原 Figma 设计稿 */
+
+// 设计稿颜色变量
+$bg-color: #ddffe2;
+$card-bg: #cafdd4;
+$primary-dark: #0b361d;
+$primary-mid: #3b6447;
+$accent-green: #006b1b;
+$light-green: #91f78e;
+$lighter-green: #acecbb;
+$bento-bg: #b5f0c2;
+$white: #ffffff;
+$red-dot: #b02500;
+
+.notifications-page {
+  min-height: 100vh;
+  background-color: $bg-color;
+}
+
+/* 顶部导航栏 */
+.header-bar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  backdrop-filter: blur(12rpx);
+  -webkit-backdrop-filter: blur(12rpx);
+  background-color: rgba(221, 255, 226, 0.8);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-left: 32rpx;
+  padding-right: 32rpx;
+  z-index: 100;
+  box-sizing: border-box;
+}
+
+.back-icon {
+  width: 48rpx;
+  height: 64rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.arrow-left {
+  width: 24rpx;
+  height: 24rpx;
+  border-left: 4rpx solid $accent-green;
+  border-bottom: 4rpx solid $accent-green;
+  transform: rotate(45deg);
+}
+
+.header-title {
+  font-size: 36rpx;
+  font-weight: 500;
+  color: $primary-dark;
+}
+
+.header-right {
+  width: 48rpx;
+  height: 64rpx;
+}
+
+/* 页面内容 */
 .page-content {
-  padding: 0;
-  padding-top: calc(44px + env(safe-area-inset-top));
+  padding: 32rpx;
+  padding-bottom: 160rpx;
 }
 
-.header-action {
+/* 页面标题区 */
+.page-header {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  margin-bottom: 32rpx;
+  padding: 0 16rpx;
+}
+
+.header-title-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8rpx;
+}
+
+.page-title {
+  font-size: 60rpx;
+  font-weight: 500;
+  color: $primary-dark;
+  letter-spacing: -2rpx;
+}
+
+.page-subtitle {
   font-size: 28rpx;
-  color: #07c160;
+  color: $primary-mid;
 }
 
-.loading-area,
-.empty-area {
-  padding: 160rpx 0;
+.mark-all-btn {
+  background-color: $light-green;
+  padding: 16rpx 32rpx;
+  border-radius: 9999rpx;
+
+  text {
+    font-size: 28rpx;
+    color: $accent-green;
+    font-weight: 500;
+  }
 }
 
 /* 通知列表 */
 .notification-list {
-  background: #fff;
-}
-
-.notification-item {
   display: flex;
-  align-items: flex-start;
-  padding: 32rpx;
-  border-bottom: 2rpx solid #f5f5f5;
-  background: #fff;
-  transition: background 0.2s;
+  flex-direction: column;
+  gap: 32rpx;
 }
 
-.notification-item:active {
-  background: #f8f8f8;
+/* 通知卡片 */
+.notification-card {
+  background-color: $white;
+  border-radius: 24rpx;
+  padding: 40rpx;
+  box-shadow: 0 12rpx 32rpx rgba(11, 54, 29, 0.04);
+  position: relative;
+  transition: all 0.2s;
+
+  &:active {
+    transform: scale(0.98);
+  }
+
+  &.read {
+    opacity: 0.7;
+    background-color: rgba(190, 245, 202, 0.4);
+
+    .notification-icon-wrapper {
+      background-color: $lighter-green;
+    }
+  }
 }
 
-.notification-item.unread {
-  background: #f0f9ff;
+.notification-main {
+  display: flex;
+  gap: 32rpx;
 }
 
-.notification-icon {
-  width: 72rpx;
-  height: 72rpx;
-  background: #f0f0f0;
-  border-radius: 36rpx;
+/* 图标区域 */
+.notification-icon-wrapper {
+  width: 96rpx;
+  height: 96rpx;
+  border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 36rpx;
-  margin-right: 24rpx;
   flex-shrink: 0;
+
+  &.like {
+    background-color: rgba(145, 247, 142, 0.6);
+  }
+
+  &.comment {
+    background-color: rgba(145, 247, 142, 0.6);
+  }
+
+  &.system {
+    background-color: rgba(145, 247, 142, 0.4);
+  }
+
+  &.achievement {
+    background-color: $lighter-green;
+  }
 }
 
+.notification-icon {
+  font-size: 40rpx;
+}
+
+/* 内容区域 */
 .notification-content {
   flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 8rpx;
 }
 
 .notification-header {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: 12rpx;
+  margin-bottom: 4rpx;
 }
 
 .notification-title {
-  font-size: 30rpx;
+  font-size: 32rpx;
   font-weight: 500;
-  color: #333;
+  color: $primary-dark;
 }
 
 .notification-time {
   font-size: 24rpx;
-  color: #999;
+  color: rgba(59, 100, 71, 0.6);
 }
 
 .notification-body {
+  margin-bottom: 8rpx;
+}
+
+.notification-text {
   font-size: 28rpx;
-  color: #666;
+  color: $primary-mid;
   line-height: 1.5;
 }
 
+/* 引用卡片 */
+.quote-card {
+  margin-top: 16rpx;
+  padding: 24rpx;
+  border-radius: 16rpx;
+  display: flex;
+  align-items: center;
+  gap: 24rpx;
+
+  &.like {
+    background-color: $card-bg;
+  }
+
+  &.comment {
+    background-color: rgba(202, 253, 212, 0.5);
+    border-left: 8rpx solid $light-green;
+  }
+}
+
+.quote-thumb {
+  width: 64rpx;
+  height: 64rpx;
+  border-radius: 12rpx;
+  overflow: hidden;
+  background-color: $lighter-green;
+  flex-shrink: 0;
+}
+
+.thumb-image {
+  width: 100%;
+  height: 100%;
+}
+
+.thumb-placeholder {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 28rpx;
+}
+
+.quote-text {
+  font-size: 24rpx;
+  color: $primary-mid;
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* 系统通知图片 */
+.system-image-wrapper {
+  margin-top: 16rpx;
+  height: 280rpx;
+  border-radius: 24rpx;
+  overflow: hidden;
+  position: relative;
+}
+
+.system-image {
+  width: 100%;
+  height: 100%;
+}
+
+.system-image-overlay {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 24rpx;
+  background: linear-gradient(to top, rgba(0, 107, 27, 0.6) 0%, rgba(0, 107, 27, 0) 100%);
+}
+
+.system-btn {
+  background-color: $accent-green;
+  padding: 8rpx 16rpx;
+  border-radius: 8rpx;
+  font-size: 24rpx;
+  color: $white;
+  display: inline-block;
+}
+
+/* 未读红点 */
 .unread-dot {
+  position: absolute;
+  top: 48rpx;
+  right: 48rpx;
   width: 16rpx;
   height: 16rpx;
-  background: #fa5151;
+  background-color: $red-dot;
   border-radius: 50%;
-  margin-left: 16rpx;
-  flex-shrink: 0;
+}
+
+/* 历史分隔 */
+.history-divider {
+  text-align: center;
+  padding: 32rpx 0 16rpx;
+
+  text {
+    font-size: 24rpx;
+    color: #568061;
+    letter-spacing: 2rpx;
+  }
 }
 
 /* 加载更多 */
 .load-more {
-  padding: 40rpx 0;
+  padding: 48rpx 0;
   text-align: center;
   font-size: 28rpx;
-  color: #999;
+  color: $primary-mid;
+}
+
+/* 空状态 */
+.empty-area {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 200rpx 0;
+}
+
+.empty-icon {
+  font-size: 120rpx;
+  margin-bottom: 32rpx;
+}
+
+.empty-title {
+  font-size: 36rpx;
+  color: $primary-dark;
+  font-weight: 500;
+  margin-bottom: 16rpx;
+}
+
+.empty-desc {
+  font-size: 28rpx;
+  color: $primary-mid;
+}
+
+.loading-area {
+  padding: 200rpx 0;
 }

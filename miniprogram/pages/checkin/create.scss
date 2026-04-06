@@ -1,50 +1,179 @@
-/* 创建打卡页样式 */
-.page-content {
-  padding: 24rpx 24rpx 60rpx;
-  padding-top: calc(44px + env(safe-area-inset-top) + 24rpx);
+/* 创建打卡页样式 - 完全还原 Figma 设计稿 */
+
+// 设计稿颜色变量
+$bg-color: #ddffe2;
+$card-bg: #cafdd4;
+$primary-dark: #0b361d;
+$primary-mid: #3b6447;
+$accent-green: #006b1b;
+$light-green: #91f78e;
+$lighter-green: #acecbb;
+$input-placeholder: #8bb795;
+$white: #ffffff;
+$btn-text: #d1ffc8;
+
+.create-checkin-page {
+  min-height: 100vh;
+  background-color: $bg-color;
 }
 
-/* 主题信息条 */
-.theme-info-bar {
+/* 顶部导航栏 - 完全还原 Figma 设计稿 */
+.header-bar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  backdrop-filter: blur(12rpx);
+  -webkit-backdrop-filter: blur(12rpx);
+  background-color: rgba(221, 255, 226, 0.8);
   display: flex;
   align-items: center;
-  padding: 24rpx 32rpx;
-  background: #e6f7ed;
-  border-radius: 16rpx;
-  margin-bottom: 24rpx;
+  justify-content: space-between;
+  padding-left: 32rpx;
+  padding-right: 32rpx;
+  z-index: 100;
+  box-sizing: border-box;
 }
 
-.theme-info-bar .label {
-  font-size: 28rpx;
-  color: #666;
+.back-icon {
+  width: 48rpx;
+  height: 64rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
-.theme-info-bar .value {
-  flex: 1;
-  font-size: 30rpx;
-  color: #07c160;
+.arrow-left {
+  width: 24rpx;
+  height: 24rpx;
+  border-left: 4rpx solid $accent-green;
+  border-bottom: 4rpx solid $accent-green;
+  transform: rotate(45deg);
+}
+
+.header-title {
+  font-size: 36rpx;
   font-weight: 500;
-  margin-left: 16rpx;
+  color: $accent-green;
+  height: 64rpx;
+  line-height: 64rpx;
 }
 
-/* 内容输入 */
+.publish-btn {
+  background-color: $accent-green;
+  padding: 12rpx 40rpx;
+  border-radius: 9999rpx;
+}
+
+.publish-btn text {
+  font-size: 28rpx;
+  color: $btn-text;
+}
+
+/* 页面内容 */
+.page-content {
+  padding: 32rpx 48rpx;
+  padding-bottom: 160rpx;
+}
+
+/* 进度指示器 */
+.progress-indicator {
+  display: flex;
+  gap: 12rpx;
+  margin-bottom: 48rpx;
+}
+
+.progress-segment {
+  flex: 1;
+  height: 8rpx;
+  background-color: $light-green;
+  border-radius: 9999rpx;
+}
+
+.progress-segment.active {
+  background-color: $accent-green;
+}
+
+.progress-segment.light {
+  background-color: $lighter-green;
+}
+
+/* 页面标题区 */
+.page-header {
+  margin-bottom: 48rpx;
+}
+
+.header-title-text {
+  font-size: 48rpx;
+  font-weight: 500;
+  color: $primary-dark;
+  margin-bottom: 8rpx;
+  letter-spacing: -0.6rpx;
+}
+
+.header-desc {
+  font-size: 28rpx;
+  color: $primary-mid;
+}
+
+/* 主卡片 */
+.main-card {
+  background-color: $white;
+  border-radius: 24rpx;
+  padding: 48rpx;
+  box-shadow: 0 12rpx 32rpx rgba(11, 54, 29, 0.04);
+  margin-bottom: 32rpx;
+}
+
+/* 内容输入区 */
+.content-section {
+  margin-bottom: 48rpx;
+}
+
 .content-input {
   width: 100%;
-  min-height: 200rpx;
-  padding: 16rpx 0;
-  font-size: 30rpx;
+  min-height: 280rpx;
+  font-size: 36rpx;
+  color: $primary-dark;
   line-height: 1.6;
+  margin-bottom: 16rpx;
+}
+
+.content-input::placeholder {
+  color: $input-placeholder;
 }
 
 .word-count {
   text-align: right;
-  font-size: 24rpx;
-  color: #999;
-  margin-top: 16rpx;
+  font-size: 20rpx;
+  color: $input-placeholder;
+  letter-spacing: 1rpx;
 }
 
-/* 图片上传 */
-.image-uploader {
+/* 图片上传区 */
+.image-section {
+  margin-bottom: 48rpx;
+}
+
+.section-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 24rpx;
+}
+
+.section-title {
+  font-size: 28rpx;
+  color: $primary-dark;
+}
+
+.section-limit {
+  font-size: 20rpx;
+  color: $accent-green;
+}
+
+/* 图片网格 */
+.image-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 24rpx;
@@ -53,8 +182,9 @@
 .image-item {
   position: relative;
   aspect-ratio: 1;
-  border-radius: 12rpx;
+  border-radius: 16rpx;
   overflow: hidden;
+  background-color: rgba(190, 245, 202, 0.3);
 }
 
 .uploaded-image {
@@ -69,7 +199,7 @@
   width: 40rpx;
   height: 40rpx;
   background: rgba(0, 0, 0, 0.5);
-  color: #fff;
+  color: $white;
   border-radius: 50%;
   display: flex;
   align-items: center;
@@ -80,141 +210,164 @@
 .upload-btn {
   aspect-ratio: 1;
   display: flex;
-  flex-direction: column;
   align-items: center;
   justify-content: center;
-  background: #f7f7f7;
-  border-radius: 12rpx;
-  border: 2rpx dashed #ddd;
+  background-color: $card-bg;
+  border-radius: 16rpx;
+  border: 4rpx dashed $lighter-green;
 }
 
 .upload-icon {
-  font-size: 48rpx;
-  color: #999;
-  margin-bottom: 8rpx;
+  font-size: 56rpx;
+  color: $accent-green;
 }
 
-.upload-text {
-  font-size: 24rpx;
-  color: #999;
+.image-placeholder {
+  aspect-ratio: 1;
+  background-color: rgba(190, 245, 202, 0.3);
+  border-radius: 16rpx;
+  border: 2rpx solid rgba(172, 236, 187, 0.2);
 }
 
-/* 心情选择 */
+/* 心情选择区 */
+.mood-section {
+  margin-bottom: 48rpx;
+}
+
+.mood-section .section-title {
+  font-size: 28rpx;
+  color: $primary-dark;
+  margin-bottom: 32rpx;
+}
+
 .mood-selector {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 24rpx;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: rgba(202, 253, 212, 0.5);
+  border-radius: 32rpx;
+  padding: 32rpx;
 }
 
 .mood-item {
   display: flex;
-  flex-direction: column;
   align-items: center;
-  padding: 32rpx 16rpx;
-  background: #f7f7f7;
-  border-radius: 16rpx;
+  justify-content: center;
+  padding: 8rpx;
+  border-radius: 50%;
   transition: all 0.2s;
-  border: 4rpx solid transparent;
 }
 
 .mood-item.active {
-  background: #fff5e6;
-  border-color: #faad14;
+  background-color: rgba(145, 247, 142, 0.3);
+  box-shadow: 0 0 0 4rpx $light-green;
 }
 
 .mood-emoji {
   font-size: 48rpx;
-  margin-bottom: 12rpx;
 }
 
-.mood-label {
-  font-size: 26rpx;
-  color: #666;
-}
-
-.mood-item.active .mood-label {
-  color: #faad14;
-  font-weight: 500;
-}
-
-/* 位置 */
-.location-row {
+/* 位置选择区 */
+.location-section {
   display: flex;
   align-items: center;
   justify-content: space-between;
+  background-color: rgba(181, 240, 194, 0.4);
+  border-radius: 24rpx;
+  padding: 32rpx;
+}
+
+.location-left {
+  display: flex;
+  align-items: center;
+  gap: 24rpx;
+}
+
+.location-icon-wrapper {
+  width: 80rpx;
+  height: 80rpx;
+  background-color: $light-green;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.location-icon {
+  font-size: 40rpx;
 }
 
 .location-info {
   display: flex;
-  align-items: center;
-  flex: 1;
+  flex-direction: column;
+  gap: 8rpx;
 }
 
-.location-icon {
-  font-size: 32rpx;
-  margin-right: 12rpx;
-}
-
-.location-text {
-  flex: 1;
+.location-title {
   font-size: 28rpx;
-  color: #333;
+  color: $primary-dark;
 }
 
-.location-hint {
-  flex: 1;
-  font-size: 28rpx;
-  color: #999;
+.location-subtitle {
+  font-size: 22rpx;
+  color: $primary-mid;
 }
 
-/* 日期选择 */
-.date-picker {
+.location-arrow {
+  font-size: 40rpx;
+  color: $primary-mid;
+}
+
+/* 快捷按钮区 */
+.quick-actions {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 24rpx;
+}
+
+.action-btn {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  padding: 24rpx 0;
+  gap: 24rpx;
+  background-color: $card-bg;
+  border-radius: 24rpx;
+  padding: 32rpx;
 }
 
-.date-value {
-  font-size: 30rpx;
-  color: #333;
+.action-icon {
+  font-size: 40rpx;
 }
 
-.picker-arrow {
-  font-size: 36rpx;
-  color: #999;
-}
-
-/* 提交区域 */
-.submit-area {
-  margin-top: 48rpx;
+.action-text {
+  font-size: 24rpx;
+  color: $primary-mid;
 }
 
 /* 上传进度 */
 .upload-progress {
-  margin-bottom: 24rpx;
-  padding: 24rpx;
-  background: #f7f7f7;
-  border-radius: 16rpx;
+  margin-top: 48rpx;
+  padding: 32rpx;
+  background: $card-bg;
+  border-radius: 24rpx;
 }
 
 .progress-text {
   font-size: 28rpx;
-  color: #666;
+  color: $primary-mid;
   text-align: center;
-  margin-bottom: 16rpx;
+  margin-bottom: 24rpx;
 }
 
 .progress-bar {
-  height: 12rpx;
-  background: #e5e5e5;
-  border-radius: 6rpx;
+  height: 16rpx;
+  background: $lighter-green;
+  border-radius: 9999rpx;
   overflow: hidden;
 }
 
 .progress-fill {
   height: 100%;
-  background: #07c160;
-  border-radius: 6rpx;
+  background: $accent-green;
+  border-radius: 9999rpx;
   transition: width 0.3s;
 }

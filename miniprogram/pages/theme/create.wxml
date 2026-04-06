@@ -1,12 +1,29 @@
-<!-- 创建主题页 -->
+<!-- 创建主题页 - 完全还原 Figma 设计稿 -->
 <view class="create-theme-page">
-  <navbar title="创建主题"></navbar>
+  <!-- 顶部导航栏 -->
+  <view class="header-bar" style="height: {{navBarHeight}}px; padding-top: {{statusBarHeight}}px;">
+    <view class="back-icon" bind:tap="goBack">
+      <view class="arrow-left"></view>
+    </view>
+    <view class="header-title">创建主题</view>
+    <view class="header-right"></view>
+  </view>
 
-  <view class="page-content">
-    <!-- 基本信息 -->
-    <card title="基本信息">
-      <view class="form-item">
-        <view class="form-label required">主题名称</view>
+  <view class="page-content" style="padding-top: {{navBarHeight + 16}}px;">
+    <!-- 页面标题 -->
+    <view class="page-header">
+      <view class="header-title-text">基本信息</view>
+      <view class="header-desc">定义您的习惯仪式。一个好的名字与描述是持久坚持的开始。</view>
+    </view>
+
+    <!-- 表单卡片 -->
+    <view class="form-card">
+      <!-- 主题名称 -->
+      <view class="form-group">
+        <view class="form-label">
+          <text class="label-icon">▱</text>
+          <text>主题名称</text>
+        </view>
         <input
           class="form-input"
           placeholder="请输入主题名称"
@@ -17,11 +34,15 @@
         />
       </view>
 
-      <view class="form-item">
-        <view class="form-label">主题描述</view>
+      <!-- 主题描述 -->
+      <view class="form-group">
+        <view class="form-label">
+          <text class="label-icon">📝</text>
+          <text>主题描述</text>
+        </view>
         <textarea
           class="form-textarea"
-          placeholder="请输入主题描述（选填）"
+          placeholder="请输入描述..."
           value="{{form.description}}"
           bind:input="onTextareaChange"
           data-field="description"
@@ -29,91 +50,118 @@
         />
       </view>
 
-      <view class="form-item">
-        <view class="form-label required">主题类型</view>
+      <!-- 主题类型 -->
+      <view class="form-group">
+        <view class="form-label">
+          <text class="label-icon">⚙</text>
+          <text>主题类型</text>
+        </view>
         <view class="type-selector">
           <view
             class="type-option {{form.type === 'simple' ? 'active' : ''}}"
             bind:tap="selectType"
             data-type="simple"
           >
-            <text class="type-icon">✓</text>
-            <text class="type-name">简单打卡</text>
-            <text class="type-desc">快速打卡，适合简单习惯养成</text>
+            <view class="type-icon-wrapper simple-icon">
+              <text class="type-icon">✓</text>
+            </view>
+            <view class="type-info">
+              <text class="type-name">简单打卡</text>
+              <text class="type-desc">快速签到，一键完成</text>
+            </view>
+            <view class="type-check">
+              <view wx:if="{{form.type === 'simple'}}" class="check-icon">✓</view>
+            </view>
           </view>
           <view
             class="type-option {{form.type === 'rich' ? 'active' : ''}}"
             bind:tap="selectType"
             data-type="rich"
           >
-            <text class="type-icon">📝</text>
-            <text class="type-name">富文本打卡</text>
-            <text class="type-desc">图文记录，适合详细记录</text>
+            <view class="type-icon-wrapper rich-icon">
+              <text class="type-icon">📝</text>
+            </view>
+            <view class="type-info">
+              <text class="type-name">富文本打卡</text>
+              <text class="type-desc">图文记录，感悟分享</text>
+            </view>
+            <view class="type-check">
+              <view wx:if="{{form.type === 'rich'}}" class="check-icon">✓</view>
+            </view>
           </view>
         </view>
       </view>
-    </card>
 
-    <!-- 时间设置 -->
-    <card title="时间设置">
-      <view class="form-item">
-        <view class="form-label required">开始日期</view>
-        <picker mode="date" value="{{form.startDate}}" bind:change="onDateChange" data-field="startDate">
-          <view class="picker-value">{{form.startDate || '请选择开始日期'}}</view>
-        </picker>
-      </view>
-
-      <view class="form-item">
-        <view class="form-label required">结束日期</view>
-        <picker mode="date" value="{{form.endDate}}" bind:change="onDateChange" data-field="endDate">
-          <view class="picker-value">{{form.endDate || '请选择结束日期'}}</view>
-        </picker>
-      </view>
-
-      <view class="form-item">
-        <view class="form-label">打卡提醒</view>
-        <picker mode="time" value="{{form.reminderTime}}" bind:change="onTimeChange">
-          <view class="picker-value">{{form.reminderTime || '不提醒'}}</view>
-        </picker>
-      </view>
-
-      <view class="form-item">
-        <view class="form-label">重复周期</view>
-        <view class="repeat-days">
-          <view
-            wx:for="{{repeatDays}}"
-            wx:key="value"
-            class="day-tag {{isDaySelected(item.value) ? 'active' : ''}}"
-            bind:tap="toggleRepeatDay"
-            data-day="{{item.value}}"
-          >{{item.label}}</view>
+      <!-- 时间设置 -->
+      <view class="form-group">
+        <view class="form-label">时间设置</view>
+        <view class="time-settings">
+          <view class="time-item">
+            <text class="time-label">开始日期</text>
+            <picker mode="date" value="{{form.startDate}}" bind:change="onDateChange" data-field="startDate">
+              <view class="time-value">{{form.startDate}}</view>
+            </picker>
+          </view>
+          <view class="time-item">
+            <text class="time-label">结束日期</text>
+            <picker mode="date" value="{{form.endDate}}" bind:change="onDateChange" data-field="endDate">
+              <view class="time-value">{{form.endDate}}</view>
+            </picker>
+          </view>
+          <view class="time-item">
+            <text class="time-label">打卡提醒</text>
+            <picker mode="time" value="{{form.reminderTime}}" bind:change="onTimeChange">
+              <view class="time-value">{{form.reminderTime || '不提醒'}}</view>
+            </picker>
+          </view>
+          <view class="time-item repeat-item">
+            <text class="time-label">重复周期</text>
+            <view class="repeat-days">
+              <view
+                wx:for="{{repeatDays}}"
+                wx:key="value"
+                class="day-tag {{isDaySelected(item.value) ? 'active' : ''}}"
+                bind:tap="toggleRepeatDay"
+                data-day="{{item.value}}"
+              >{{item.label}}</view>
+            </view>
+          </view>
         </view>
       </view>
-    </card>
 
-    <!-- 高级设置 -->
-    <card title="高级设置">
-      <view class="form-item switch-item">
-        <view class="form-label">允许补打卡</view>
-        <switch checked="{{form.allowSupplement}}" bind:change="onSwitchChange" data-field="allowSupplement" />
+      <!-- 高级设置 -->
+      <view class="form-group">
+        <view class="form-label">高级设置</view>
+        <view class="switch-list">
+          <view class="switch-item">
+            <text class="switch-label">允许补打卡</text>
+            <switch
+              checked="{{form.allowSupplement}}"
+              bind:change="onSwitchChange"
+              data-field="allowSupplement"
+              color="#006b1b"
+            />
+          </view>
+          <view class="switch-item">
+            <text class="switch-label">公开主题</text>
+            <switch
+              checked="{{form.isPublic}}"
+              bind:change="onSwitchChange"
+              data-field="isPublic"
+              color="#006b1b"
+            />
+          </view>
+        </view>
       </view>
 
-      <view class="form-item switch-item">
-        <view class="form-label">公开主题</view>
-        <switch checked="{{form.isPublic}}" bind:change="onSwitchChange" data-field="isPublic" />
+      <!-- 提交按钮 -->
+      <view class="submit-btn" bind:tap="submit">
+        <text class="btn-text">{{submitting ? '创建中...' : '创建主题'}}</text>
+        <text wx:if="{{!submitting}}" class="btn-arrow">→</text>
       </view>
-    </card>
-
-    <!-- 提交按钮 -->
-    <view class="submit-area">
-      <custom-button
-        type="primary"
-        size="large"
-        round
-        loading="{{submitting}}"
-        disabled="{{submitting}}"
-        bind:tap="submit"
-      >{{submitting ? '创建中...' : '创建主题'}}</custom-button>
     </view>
+
+    <!-- 底部装饰 -->
+    <view class="decorative-image"></view>
   </view>
 </view>

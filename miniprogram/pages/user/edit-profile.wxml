@@ -1,0 +1,94 @@
+<!-- 编辑个人资料页 - 完全还原 Figma 设计风格 -->
+<view class="edit-profile-page">
+  <!-- 顶部导航栏 -->
+  <view class="header-bar" style="height: {{navBarHeight}}px; padding-top: {{statusBarHeight}}px;">
+    <view class="back-icon" bind:tap="goBack">
+      <view class="arrow-left"></view>
+    </view>
+    <view class="header-title">编辑资料</view>
+    <view class="header-right"></view>
+  </view>
+
+  <view class="page-content" style="padding-top: {{navBarHeight + 16}}px;">
+    <!-- 头像编辑区 -->
+    <view class="avatar-section">
+      <view class="avatar-wrapper" bind:tap="chooseAvatar">
+        <image
+          wx:if="{{form.avatarUrl}}"
+          class="user-avatar"
+          src="{{form.avatarUrl}}"
+          mode="aspectFill"
+        />
+        <view wx:else class="avatar-placeholder">
+          <text class="avatar-icon">👤</text>
+        </view>
+        <view class="avatar-edit-badge">
+          <text class="edit-icon">📷</text>
+        </view>
+      </view>
+      <text class="avatar-tip">点击更换头像</text>
+    </view>
+
+    <!-- 表单卡片 -->
+    <view class="form-card">
+      <!-- 昵称 -->
+      <view class="form-item">
+        <view class="form-label">
+          <text class="label-icon">👤</text>
+          <text class="label-text">昵称</text>
+        </view>
+        <input
+          class="form-input"
+          type="text"
+          placeholder="请输入昵称"
+          value="{{form.nickname}}"
+          bind:input="onNicknameInput"
+          maxlength="20"
+        />
+        <text class="input-count">{{form.nickname.length}}/20</text>
+      </view>
+
+      <!-- 分隔线 -->
+      <view class="form-divider"></view>
+
+      <!-- 个人简介 -->
+      <view class="form-item textarea-item">
+        <view class="form-label">
+          <text class="label-icon">✍️</text>
+          <text class="label-text">个人简介</text>
+        </view>
+        <textarea
+          class="form-textarea"
+          placeholder="介绍一下你自己..."
+          value="{{form.bio}}"
+          bind:input="onBioInput"
+          maxlength="100"
+          auto-height
+        />
+        <text class="input-count textarea-count">{{form.bio.length}}/100</text>
+      </view>
+    </view>
+
+    <!-- 快捷标签 -->
+    <view class="tags-section">
+      <text class="tags-title">推荐简介</text>
+      <view class="tags-list">
+        <view class="tag-item" bind:tap="setBio" data-bio="专注当下，生如夏花">专注当下，生如夏花</view>
+        <view class="tag-item" bind:tap="setBio" data-bio="坚持每一天">坚持每一天</view>
+        <view class="tag-item" bind:tap="setBio" data-bio="记录美好生活">记录美好生活</view>
+        <view class="tag-item" bind:tap="setBio" data-bio="做更好的自己">做更好的自己</view>
+      </view>
+    </view>
+
+    <!-- 操作按钮 -->
+    <view class="action-buttons">
+      <view class="submit-btn {{submitting ? 'disabled' : ''}}" bind:tap="saveProfile">
+        <text wx:if="{{!submitting}}">保存修改</text>
+        <text wx:else>保存中...</text>
+      </view>
+      <view class="reset-btn" bind:tap="resetForm">
+        <text>重置</text>
+      </view>
+    </view>
+  </view>
+</view>

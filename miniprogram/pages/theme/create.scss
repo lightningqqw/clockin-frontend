@@ -1,91 +1,261 @@
-/* 创建主题页样式 */
-.page-content {
-  padding: 24rpx 24rpx 60rpx;
-  padding-top: calc(44px + env(safe-area-inset-top) + 24rpx);
+/* 创建主题页样式 - 完全还原 Figma 设计稿 */
+
+// 设计稿颜色变量
+$bg-color: #ddffe2;
+$card-bg: #cafdd4;
+$primary-dark: #0b361d;
+$primary-mid: #3b6447;
+$accent-green: #006b1b;
+$light-green: #91f78e;
+$lighter-green: #acecbb;
+$input-bg: #acecbb;
+$input-text: #568061;
+$white: #ffffff;
+$btn-text: #d1ffc8;
+
+.create-theme-page {
+  min-height: 100vh;
+  background-color: $bg-color;
 }
 
-/* 表单样式 */
-.form-item {
-  margin-bottom: 32rpx;
-}
-
-.form-item:last-child {
-  margin-bottom: 0;
-}
-
-.form-label {
-  font-size: 28rpx;
-  color: #333;
-  margin-bottom: 16rpx;
-  font-weight: 500;
-}
-
-.form-label.required::before {
-  content: '* ';
-  color: #fa5151;
-}
-
-.form-input,
-.form-textarea {
-  width: 100%;
-  padding: 24rpx;
-  background: #f7f7f7;
-  border-radius: 12rpx;
-  font-size: 28rpx;
+/* 顶部导航栏 - 完全还原 Figma 设计稿 */
+.header-bar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  backdrop-filter: blur(12rpx);
+  -webkit-backdrop-filter: blur(12rpx);
+  background-color: rgba(221, 255, 226, 0.8);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-left: 32rpx;
+  padding-right: 32rpx;
+  z-index: 100;
   box-sizing: border-box;
 }
 
-.form-textarea {
-  height: 160rpx;
+.back-icon {
+  width: 48rpx;
+  height: 64rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
-.picker-value {
-  padding: 24rpx;
-  background: #f7f7f7;
-  border-radius: 12rpx;
+.arrow-left {
+  width: 24rpx;
+  height: 24rpx;
+  border-left: 4rpx solid $accent-green;
+  border-bottom: 4rpx solid $accent-green;
+  transform: rotate(45deg);
+}
+
+.header-title {
+  font-size: 36rpx;
+  font-weight: 500;
+  color: $accent-green;
+  height: 64rpx;
+  line-height: 64rpx;
+}
+
+.header-right {
+  width: 48rpx;
+  height: 64rpx;
+}
+
+/* 页面内容 */
+.page-content {
+  padding: 32rpx 48rpx;
+  padding-bottom: 160rpx;
+}
+
+/* 页面标题区 */
+.page-header {
+  margin-bottom: 40rpx;
+}
+
+.header-title-text {
+  font-size: 64rpx;
+  font-weight: 500;
+  color: $primary-dark;
+  margin-bottom: 16rpx;
+  letter-spacing: -0.8rpx;
+}
+
+.header-desc {
+  font-size: 32rpx;
+  color: $primary-mid;
+  line-height: 1.6;
+}
+
+/* 表单卡片 */
+.form-card {
+  background-color: $white;
+  border-radius: 24rpx;
+  padding: 48rpx;
+  box-shadow: 0 12rpx 32rpx rgba(11, 54, 29, 0.06);
+  margin-bottom: 40rpx;
+}
+
+/* 表单组 */
+.form-group {
+  margin-bottom: 48rpx;
+}
+
+.form-group:last-child {
+  margin-bottom: 0;
+}
+
+/* 表单标签 */
+.form-label {
+  display: flex;
+  align-items: center;
+  gap: 16rpx;
+  font-size: 32rpx;
+  color: $primary-mid;
+  margin-bottom: 24rpx;
+}
+
+.label-icon {
   font-size: 28rpx;
-  color: #333;
 }
 
-/* 类型选择 */
+/* 输入框 - 绿色背景 */
+.form-input,
+.form-textarea {
+  width: 100%;
+  background-color: $input-bg;
+  border-radius: 16rpx;
+  padding: 32rpx;
+  font-size: 32rpx;
+  color: $primary-dark;
+  box-sizing: border-box;
+  border: none;
+}
+
+.form-input::placeholder,
+.form-textarea::placeholder {
+  color: $input-text;
+}
+
+.form-textarea {
+  height: 200rpx;
+}
+
+/* 类型选择器 */
 .type-selector {
   display: flex;
+  flex-direction: column;
   gap: 24rpx;
 }
 
 .type-option {
-  flex: 1;
-  padding: 32rpx 24rpx;
-  background: #f7f7f7;
-  border-radius: 16rpx;
-  text-align: center;
+  display: flex;
+  align-items: center;
+  gap: 32rpx;
+  padding: 36rpx;
+  background-color: $card-bg;
+  border-radius: 24rpx;
   border: 4rpx solid transparent;
   transition: all 0.2s;
 }
 
 .type-option.active {
-  background: #f0f9ff;
-  border-color: #07c160;
+  background-color: rgba(145, 247, 142, 0.3);
+  border-color: $accent-green;
+}
+
+.type-icon-wrapper {
+  width: 80rpx;
+  height: 80rpx;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.type-icon-wrapper.simple-icon {
+  background-color: $light-green;
+}
+
+.type-icon-wrapper.rich-icon {
+  background-color: $light-green;
 }
 
 .type-icon {
-  font-size: 48rpx;
-  margin-bottom: 16rpx;
+  font-size: 40rpx;
+}
+
+.type-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 8rpx;
 }
 
 .type-name {
-  font-size: 30rpx;
+  font-size: 32rpx;
   font-weight: 500;
-  color: #333;
-  margin-bottom: 8rpx;
+  color: $primary-dark;
 }
 
 .type-desc {
   font-size: 24rpx;
-  color: #999;
+  color: $primary-mid;
 }
 
-/* 重复日期 */
+.type-check {
+  width: 40rpx;
+  height: 40rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.check-icon {
+  font-size: 32rpx;
+  color: $accent-green;
+}
+
+/* 时间设置 */
+.time-settings {
+  display: flex;
+  flex-direction: column;
+  gap: 16rpx;
+}
+
+.time-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 24rpx 0;
+  border-bottom: 2rpx solid rgba(0, 107, 27, 0.1);
+}
+
+.time-item:last-child {
+  border-bottom: none;
+}
+
+.time-label {
+  font-size: 30rpx;
+  color: $primary-mid;
+}
+
+.time-value {
+  font-size: 30rpx;
+  color: $accent-green;
+}
+
+.repeat-item {
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 16rpx;
+}
+
+/* 重复日期标签 */
 .repeat-days {
   display: flex;
   flex-wrap: wrap;
@@ -94,26 +264,73 @@
 
 .day-tag {
   padding: 16rpx 32rpx;
-  background: #f7f7f7;
+  background-color: $lighter-green;
   border-radius: 32rpx;
   font-size: 26rpx;
-  color: #666;
+  color: $primary-mid;
   transition: all 0.2s;
 }
 
 .day-tag.active {
-  background: #07c160;
-  color: #fff;
+  background-color: $accent-green;
+  color: $white;
 }
 
-/* 开关项 */
+/* 开关列表 */
+.switch-list {
+  display: flex;
+  flex-direction: column;
+}
+
 .switch-item {
   display: flex;
   align-items: center;
   justify-content: space-between;
+  padding: 24rpx 0;
+  border-bottom: 2rpx solid rgba(0, 107, 27, 0.1);
 }
 
-/* 提交区域 */
-.submit-area {
+.switch-item:last-child {
+  border-bottom: none;
+}
+
+.switch-label {
+  font-size: 30rpx;
+  color: $primary-mid;
+}
+
+/* 提交按钮 */
+.submit-btn {
   margin-top: 48rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16rpx;
+  padding: 32rpx;
+  background: linear-gradient(168deg, $accent-green 0%, #005d16 100%);
+  border-radius: 9999rpx;
+  box-shadow: 0 10rpx 30rpx rgba(0, 107, 27, 0.2);
+}
+
+.submit-btn:active {
+  opacity: 0.9;
+}
+
+.btn-text {
+  font-size: 32rpx;
+  color: $btn-text;
+  font-weight: 500;
+}
+
+.btn-arrow {
+  font-size: 32rpx;
+  color: $btn-text;
+}
+
+/* 底部装饰 */
+.decorative-image {
+  height: 400rpx;
+  background: linear-gradient(135deg, rgba(202, 253, 212, 0.5) 0%, rgba(145, 247, 142, 0.3) 100%);
+  border-radius: 80rpx;
+  opacity: 0.5;
 }

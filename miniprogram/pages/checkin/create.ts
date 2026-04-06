@@ -20,11 +20,22 @@ Page({
     submitting: false,
     contentLength: 0,
     uploadProgress: 0,
+    statusBarHeight: 44,
+    navBarHeight: 76,
   },
 
   async onLoad(options) {
     const themeId = options.themeId || '';
     this.setData({ themeId });
+
+    // 获取系统信息，计算状态栏高度
+    const systemInfo = wx.getSystemInfoSync();
+    const statusBarHeight = systemInfo.statusBarHeight || 44;
+    const navBarHeight = statusBarHeight + 32;
+    this.setData({
+      statusBarHeight,
+      navBarHeight,
+    });
 
     // 加载主题信息
     if (themeId) {
@@ -40,6 +51,26 @@ Page({
         showToast('加载主题失败', 'error');
       }
     }
+  },
+
+  // 返回上一页
+  goBack() {
+    wx.navigateBack();
+  },
+
+  // 生成AI灵感
+  generateAI() {
+    showToast('AI灵感生成中...', 'loading');
+    // TODO: 接入AI灵感生成接口
+    setTimeout(() => {
+      showToast('AI灵感生成成功', 'success');
+    }, 1500);
+  },
+
+  // 查看往日灵感
+  viewHistory() {
+    showToast('功能开发中', 'none');
+    // TODO: 跳转到历史灵感页面
   },
 
   // 内容变化
