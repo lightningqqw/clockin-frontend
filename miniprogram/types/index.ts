@@ -9,6 +9,7 @@ export interface IUser {
   unionId?: string;
   nickname: string;
   avatarUrl: string;
+  bio?: string;
   createdAt: string;
   updatedAt: string;
 }
@@ -17,6 +18,7 @@ export interface IUserProfile {
   id: string;
   nickname: string;
   avatarUrl: string;
+  bio?: string;
   gender?: number;
   country?: string;
   province?: string;
@@ -28,6 +30,14 @@ export interface IUserStats {
   totalThemes: number;
   totalLikes: number;
   streakDays: number;
+  // 新增字段
+  level: number;
+  levelName: string;
+  weeklyHours: number;
+  percentile: number;
+  rankText: string;
+  growthRate: number;
+  isPositive: boolean;
 }
 
 // 主题相关

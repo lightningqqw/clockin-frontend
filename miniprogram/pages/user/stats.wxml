@@ -51,7 +51,7 @@
         </view>
         <view class="trend-badge">
           <text class="trend-icon">↗</text>
-          <text class="trend-percent">+12%</text>
+          <text class="trend-percent {{stats.isPositive ? 'positive' : 'negative'}}">{{stats.isPositive ? '+' : '-'}}{{stats.growthRate}}%</text>
         </view>
       </view>
 
@@ -91,7 +91,7 @@
     <view class="achievement-card">
       <view class="achievement-content">
         <text class="achievement-title">本月最佳成就</text>
-        <text class="achievement-desc">已连续打卡 {{stats.streakDays || 0}} 天，超越 98% 用户</text>
+        <text class="achievement-desc">已连续打卡 {{stats.streakDays || 0}} 天，{{stats.rankText}}</text>
       </view>
       <view class="achievement-icon-wrapper">
         <text class="achievement-icon">🏆</text>
@@ -105,7 +105,7 @@
           <text class="bento-icon time">⏱️</text>
           <text class="bento-label">时长</text>
         </view>
-        <text class="bento-value">45.2h</text>
+        <text class="bento-value">{{stats.weeklyHours}}h</text>
         <text class="bento-desc">本周累计耗时</text>
       </view>
       <view class="bento-card">
@@ -113,8 +113,8 @@
           <text class="bento-icon active">🔥</text>
           <text class="bento-label">活跃</text>
         </view>
-        <text class="bento-value">Level 8</text>
-        <text class="bento-desc">当前的等级状态</text>
+        <text class="bento-value">Level {{stats.level}}</text>
+        <text class="bento-desc">{{stats.levelName}}</text>
       </view>
     </view>
 

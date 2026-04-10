@@ -170,6 +170,14 @@ $white: #ffffff;
   font-size: 24rpx;
   font-weight: 600;
   color: $primary-mid;
+
+  &.positive {
+    color: $accent-green;
+  }
+
+  &.negative {
+    color: #e74c3c;
+  }
 }
 
 /* 图表区域 */

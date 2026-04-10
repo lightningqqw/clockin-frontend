@@ -122,11 +122,18 @@ Page({
     this.setData({ submitting: true });
 
     try {
-      const res = await userApi.updateProfile({
+      // 只传递有值的字段，头像未选择或为空时不传递
+      const updateData: Partial<IUserProfile> = {
         nickname: form.nickname.trim(),
         bio: form.bio.trim(),
-        avatarUrl: form.avatarUrl,
-      });
+      };
+
+      // 只有当 avatarUrl 有值且不是临时路径时才传递
+      if (form.avatarUrl && !form.avatarUrl.startsWith('wxfile://')) {
+        updateData.avatarUrl = form.avatarUrl;
+      }
+
+      const res = await userApi.updateProfile(updateData);
 
       if (res.success && res.data) {
         // 更新本地存储
