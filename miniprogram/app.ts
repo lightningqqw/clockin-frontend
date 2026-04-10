@@ -35,7 +35,7 @@ App<IAppOption>({
       // 未登录，跳转到登录页
       const pages = getCurrentPages();
       const currentPage = pages[pages.length - 1];
-      const route = currentPage?.route || '';
+      const route = (currentPage && currentPage.route) || '';
 
       // 避免重复跳转
       if (!route.includes('login')) {

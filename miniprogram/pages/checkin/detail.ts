@@ -31,7 +31,7 @@ Page({
         const userInfo = userStorage.get();
         this.setData({
           checkin: res.data,
-          isOwner: res.data.userId === userInfo?.id,
+          isOwner: res.data.userId === (userInfo && userInfo.id ? userInfo.id : ''),
         });
         this.loadLikeUsers();
       }

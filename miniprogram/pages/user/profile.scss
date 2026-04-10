@@ -54,10 +54,12 @@ $logout-border: rgba(249, 86, 48, 0.3);
 
 .header-title {
   font-size: 36rpx;
-  font-weight: 500;
+  font-weight: 600;
   color: $primary-dark;
   height: 64rpx;
   line-height: 64rpx;
+  font-family: 'PingFang SC', 'HarmonyOS Sans', -apple-system, sans-serif;
+  letter-spacing: -0.01em;
 }
 
 .header-right {
@@ -122,9 +124,10 @@ $logout-border: rgba(249, 86, 48, 0.3);
 
 .user-name {
   font-size: 32rpx;
-  font-weight: 500;
+  font-weight: 600;
   color: $primary-dark;
   margin-bottom: 16rpx;
+  font-family: 'PingFang SC', 'HarmonyOS Sans', -apple-system, sans-serif;
 }
 
 .user-bio {
@@ -162,8 +165,11 @@ $logout-border: rgba(249, 86, 48, 0.3);
 
 .stat-number {
   font-size: 48rpx;
-  font-weight: bold;
+  font-weight: 600;
   color: $accent-green;
+  font-family: 'DIN Alternate', 'DIN', 'SF Pro Display', 'PingFang SC', -apple-system, sans-serif;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.02em;
 }
 
 .stat-unit {

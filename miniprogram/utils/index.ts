@@ -155,9 +155,9 @@ export function getSafeArea(): { top: number; bottom: number; height: number } {
   const info = getSystemInfo();
   const { safeArea, screenHeight } = info;
   return {
-    top: safeArea?.top || 0,
-    bottom: screenHeight - (safeArea?.bottom || screenHeight),
-    height: safeArea?.height || screenHeight,
+    top: safeArea && safeArea.top ? safeArea.top : 0,
+    bottom: screenHeight - (safeArea && safeArea.bottom ? safeArea.bottom : screenHeight),
+    height: safeArea && safeArea.height ? safeArea.height : screenHeight,
   };
 }
 

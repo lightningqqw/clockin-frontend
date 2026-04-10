@@ -157,7 +157,7 @@ Page({
       };
 
       // 可选字段只在有值时添加
-      if (form.description?.trim()) submitData.description = form.description.trim();
+      if (form.description && form.description.trim()) submitData.description = form.description.trim();
       if (form.reminderTime) submitData.reminderTime = form.reminderTime;
       if (form.coverImage) submitData.coverImage = form.coverImage;
 

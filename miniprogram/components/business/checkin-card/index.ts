@@ -47,7 +47,7 @@ Component({
       if (mood) {
         const moodOption = MOOD_OPTIONS.find((m) => m.value === mood);
         this.setData({
-          moodEmoji: moodOption?.emoji || '😊',
+          moodEmoji: moodOption ? moodOption.emoji : '😊',
         });
       }
     },

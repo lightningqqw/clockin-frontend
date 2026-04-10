@@ -31,7 +31,7 @@ Page({
     const userInfo = userStorage.get();
     this.setData({
       themeId: options.id || '',
-      userId: userInfo?.id || '',
+      userId: userInfo && userInfo.id ? userInfo.id : '',
     });
     this.loadThemeDetail();
   },
@@ -57,7 +57,7 @@ Page({
         const userInfo = userStorage.get();
         this.setData({
           theme: res.data,
-          isCreator: res.data.creatorId === userInfo?.id,
+          isCreator: res.data.creatorId === (userInfo && userInfo.id ? userInfo.id : ''),
         });
         await this.loadCheckins();
         await this.loadCalendar();
@@ -77,8 +77,8 @@ Page({
       const res = await checkinApi.canCheckinToday(this.data.themeId);
       console.log('[Debug] Can checkin response:', res);
       if (res.success) {
-        console.log('[Debug] Setting canCheckin to:', res.data?.canCheckin ?? true);
-        this.setData({ canCheckin: res.data?.canCheckin ?? true });
+        console.log('[Debug] Setting canCheckin to:', res.data && res.data.canCheckin !== undefined ? res.data.canCheckin : true);
+        this.setData({ canCheckin: res.data && res.data.canCheckin !== undefined ? res.data.canCheckin : true });
       }
     } catch (err) {
       console.error('检查打卡状态失败:', err);
@@ -289,7 +289,7 @@ Page({
 
   // 去打卡详情
   goToCheckinDetail(e: WechatMiniprogram.TouchEvent) {
-    const checkin = e.detail?.checkin;
+    const checkin = e.detail && e.detail.checkin ? e.detail.checkin : null;
     if (!checkin || !checkin.id) {
       showToast('数据加载中，请稍后重试', 'error');
       return;
@@ -301,7 +301,7 @@ Page({
 
   // 点赞
   async onLike(e: WechatMiniprogram.TouchEvent) {
-    const checkin = e.detail?.checkin;
+    const checkin = e.detail && e.detail.checkin ? e.detail.checkin : null;
     if (!checkin || !checkin.id) {
       showToast('数据加载中，请稍后重试', 'error');
       return;
@@ -320,7 +320,7 @@ Page({
 
   // 删除打卡
   async onDeleteCheckin(e: WechatMiniprogram.TouchEvent) {
-    const checkin = e.detail?.checkin;
+    const checkin = e.detail && e.detail.checkin ? e.detail.checkin : null;
     if (!checkin || !checkin.id) {
       showToast('数据加载中，请稍后重试', 'error');
       return;

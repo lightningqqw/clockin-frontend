@@ -65,7 +65,7 @@ class Request {
             reject(new Error('登录已过期，请重新登录'));
           } else {
             const data = res.data as any;
-            reject(new Error(data?.message || `请求失败: ${res.statusCode}`));
+            reject(new Error(data && data.message ? data.message : `请求失败: ${res.statusCode}`));
           }
         },
         fail: (err) => {
