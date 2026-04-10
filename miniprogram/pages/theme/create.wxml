@@ -160,8 +160,5 @@
         <text wx:if="{{!submitting}}" class="btn-arrow">→</text>
       </view>
     </view>
-
-    <!-- 底部装饰 -->
-    <view class="decorative-image"></view>
   </view>
 </view>

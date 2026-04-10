@@ -1,39 +1,37 @@
-/* 自定义 TabBar 样式 - 完全还原 Figma 设计稿 */
+/* 自定义 TabBar 样式 */
 
-// 设计稿颜色变量
-$bg-color: rgba(255, 255, 255, 0.8);
-$tab-active-bg: rgba(145, 247, 142, 0.3);
-$tab-text-color: #3b6447;
-$tab-active-text: #006b1b;
-$shadow-color: rgba(11, 54, 29, 0.08);
+// 颜色变量
+$tab-bg: rgba(255, 255, 255, 0.95);
+$tab-active-bg: #e8f5e9;
+$tab-text-color: #666666;
+$tab-active-text: #07c160;
+$border-color: rgba(229, 229, 229, 0.5);
 
 .custom-tab-bar {
   position: fixed;
   bottom: 0;
   left: 0;
   right: 0;
+  width: 100%;
   z-index: 9999;
-  padding: 0 32rpx;
   padding-bottom: env(safe-area-inset-bottom);
+  background-color: $tab-bg;
+  border-top: 1rpx solid $border-color;
 }
 
 /* TabBar 背景容器 */
 .tab-bar-bg {
-  backdrop-filter: blur(12rpx);
-  -webkit-backdrop-filter: blur(12rpx);
-  background-color: $bg-color;
-  border-radius: 32rpx 32rpx 0 0;
-  box-shadow: 0 -12rpx 32rpx $shadow-color;
-  height: 80rpx;
+  background-color: $tab-bg;
+  height: 100rpx;
+  width: 100%;
   display: flex;
   align-items: center;
   justify-content: space-around;
-  padding: 0 24rpx;
 }
 
 /* iPhone X 系列适配 */
 .custom-tab-bar.ipx .tab-bar-bg {
-  height: 100rpx;
+  height: 120rpx;
   padding-bottom: 20rpx;
 }
 
@@ -43,10 +41,9 @@ $shadow-color: rgba(11, 54, 29, 0.08);
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: 8rpx 24rpx;
-  border-radius: 16rpx;
+  flex: 1;
+  height: 100%;
   transition: all 0.2s;
-  position: relative;
 }
 
 /* 点击反馈 */
@@ -62,26 +59,25 @@ $shadow-color: rgba(11, 54, 29, 0.08);
 
 /* 选中状态 */
 .tab-item.active {
-  background-color: $tab-active-bg;
+  background-color: transparent;
 }
 
 /* Tab 图标 */
 .tab-icon {
-  font-size: 36rpx;
-  margin-bottom: 4rpx;
+  font-size: 40rpx;
+  margin-bottom: 6rpx;
   line-height: 1;
-  transition: all 0.2s;
 }
 
 /* Tab 文字 */
 .tab-text {
-  font-size: 20rpx;
+  font-size: 22rpx;
   color: $tab-text-color;
-  transition: all 0.2s;
-  font-weight: 500;
+  font-weight: 400;
 }
 
 /* 选中状态的样式 */
 .tab-item.active .tab-text {
   color: $tab-active-text;
+  font-weight: 500;
 }

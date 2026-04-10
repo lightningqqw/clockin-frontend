@@ -68,7 +68,7 @@ $btn-text: #d1ffc8;
 /* 页面内容 */
 .page-content {
   padding: 32rpx 48rpx;
-  padding-bottom: 160rpx;
+  padding-bottom: 48rpx;
 }
 
 /* 页面标题区 */
@@ -128,16 +128,20 @@ $btn-text: #d1ffc8;
   width: 100%;
   background-color: $input-bg;
   border-radius: 16rpx;
-  padding: 32rpx;
+  padding: 28rpx 32rpx;
   font-size: 32rpx;
+  line-height: 1.5;
   color: $primary-dark;
   box-sizing: border-box;
   border: none;
+  height: auto;
+  min-height: 96rpx;
 }
 
 .form-input::placeholder,
 .form-textarea::placeholder {
   color: $input-text;
+  line-height: 1.5;
 }
 
 .form-textarea {
@@ -325,12 +329,4 @@ $btn-text: #d1ffc8;
 .btn-arrow {
   font-size: 32rpx;
   color: $btn-text;
-}
-
-/* 底部装饰 */
-.decorative-image {
-  height: 400rpx;
-  background: linear-gradient(135deg, rgba(202, 253, 212, 0.5) 0%, rgba(145, 247, 142, 0.3) 100%);
-  border-radius: 80rpx;
-  opacity: 0.5;
 }

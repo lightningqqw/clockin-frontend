@@ -68,7 +68,7 @@ $logout-border: rgba(249, 86, 48, 0.3);
 /* 页面内容 */
 .page-content {
   padding: 32rpx 48rpx;
-  padding-bottom: 160rpx;
+  padding-bottom: 80rpx;
 }
 
 /* 用户信息区 */
@@ -76,7 +76,7 @@ $logout-border: rgba(249, 86, 48, 0.3);
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 48rpx 0 32rpx;
+  padding: 24rpx 0 32rpx;
   margin-bottom: 32rpx;
 }
 
@@ -253,10 +253,11 @@ $logout-border: rgba(249, 86, 48, 0.3);
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 36rpx;
+  padding: 24rpx 36rpx;
   border: 4rpx solid $logout-border;
   border-radius: 24rpx;
   transition: all 0.2s;
+  margin-bottom: 200rpx;
 }
 
 .logout-btn:active {
